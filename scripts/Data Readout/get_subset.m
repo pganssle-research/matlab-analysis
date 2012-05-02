@@ -1,4 +1,4 @@
-function [out, spans] = get_subset(data, len, start, asym, frac, num_windows, sr)
+function [out, spans, subset] = get_subset(data, len, start, asym, frac, num_windows, sr)
 % Gets a subset of the data, returns a variable "spans" indicating where
 % the subsets were taken from (scaled to the min/max of the data).
 %
@@ -122,21 +122,25 @@ if((off+window)>dlen)
 end
 
 % Where to sample from
-indices = cell2mat(arrayfun(@(x)(x*dlen+off+1):(x*dlen+off+window), 0:(num_windows-1), 'UniformOutput', false))';
-
-indices = indices + start;
+indices_pos = cell2mat(arrayfun(@(x)(x*dlen+off+1):(x*dlen+off+window), 0:2:(num_windows-1), 'UniformOutput', false))' + start;
+indices_neg = cell2mat(arrayfun(@(x)(x*dlen+off+1):(x*dlen+off+window), 1:2:(num_windows-1), 'UniformOutput', false))' + start;
+indices = cell2mat(arrayfun(@(x)(x*dlen+off+1):(x*dlen+off+window), 0:1:(num_windows-1), 'UniformOutput', false))' + start;
 
 % Set the span outputs - scaled to the outputs
-sdev = std(dat(:));
-smean = mean(dat(:));
-
-spans(:) = smean-sdev;
-spans(indices) = smean+sdev;
-
 % Now the actual output vector
 out = cell2mat(arrayfun(@(x)dat(indices, x), 1:tlen, 'UniformOutput', false));
 out = reshape(out, window, num_windows, c{:});
 
+Min = min(out(:));
+Max = max(out(:));
+s = (Max-Min)*0.05;
+smean = mean(out(:));
+
+spans(:) = smean;
+spans(indices_neg) = Min-s;
+spans(indices_pos) = Max-s;
+
+subset = indices;
 
 
 

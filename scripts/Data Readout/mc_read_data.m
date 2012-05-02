@@ -97,8 +97,44 @@ if(isfield(s, loc))
     out.disp = eval(['s.' loc]);
 end
 
+% Get the data itself
+% Temporarily this will only support transients.
+out.mdata = [];
+[~, loc] = find_struct_by_name(f, MCD_DATAGROUP);
+if(isfield(s, loc))
+    dg = s.(loc);
+    if(isstruct(dg))
+        fn = fieldnames(dg);
+        if(length(fn) >= 1)
+            data = zeros(length(dg.(fn{1})), length(fn));
+            for i = 1:length(fn)
+                data(:, i) = dg.(fn{i});
+            end
+            
+            out.mdata = data;
+            
+            if(length(fn) > 1)
+                out.adata = mean(out.mdata, 2);
+            end
+        end       
+    end
+end
 
-function [s loc] = find_struct_by_name(in, name)
+% Pulse program
+% TODO: Generalize
+out.prog = [];
+[~, loc] = find_struct_by_name(f, MCD_PROGHEADER);
+if(isfield(s, loc))
+   out.prog = s.(loc).Properties;
+end
+
+if(~isempty(out.prog))
+    np = out.prog.np;
+    sr = out.prog.sr;
+    out.t = linspace(0, np/sr, np);
+end
+
+function [s, loc] = find_struct_by_name(in, name)
 % Find a struct from its .name parameter.
 s = [];
 loc = [];

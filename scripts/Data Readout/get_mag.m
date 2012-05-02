@@ -1,4 +1,4 @@
-function [out, points, spans] = get_mag(data, len, polyorder, start, asym, frac, num_win, sr)
+function [out, points, spans, subset] = get_mag(data, len, polyorder, start, asym, frac, num_win, sr)
 % Function for getting the magnetization curve as a function of time from an
 % experiment consisting of a train of 180s.
 %
@@ -66,15 +66,15 @@ end
 
 % Get the subsets
 if(~exist('sr', 'var'))
-    [subs, spans] = get_subset(data, len, start, asym, frac, num_win);
+    [subs, spans, subset] = get_subset(data, len, start, asym, frac, num_win);
 else
-    [subs, spans] = get_subset(data, len, start, asym, frac, num_win, sr);
+    [subs, spans, subset] = get_subset(data, len, start, asym, frac, num_win, sr);
 end
 
 % Do the polynomial fit if requested.
-if(exist('polyorder', 'var') && polyorder >= 0)
-    subs = sub_poly(subs, polyorder, 1);
-end
+ if(exist('polyorder', 'var') && polyorder >= 0)
+     subs = sub_poly(subs, polyorder, 1);
+ end
 
 % Now average the output and remove the trailing singleton
 % Don't want to use squeeze in case there are 'placeholder' singletons

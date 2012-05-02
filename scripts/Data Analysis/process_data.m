@@ -22,9 +22,9 @@ else
 end
 
 % Cut and zero pack
-if(cut > 1)
+if(isscalar(cut) && cut > 1)
     out.mdata = circshift(out.mdata, -cut);
-    out.mdata((end-cut+1):end) = 0;
+    out.mdata((end-cut+1):end, :) = 0;
 end
 
 % Apodize

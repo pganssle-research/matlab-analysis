@@ -14,7 +14,7 @@ end
 
 snr = peak/noise;
 current = voltage/resistance; % Current in mArms/sqrt(Hz)
-field = current*1.96/1000; % Field in Grms/sqrt(Hz)
+field = current*3.92/1000; % Field in Grms/sqrt(Hz)
 
 out = field*1e11/snr; % Sensitivity in fT/sqrt(Hz)
 

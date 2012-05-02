@@ -31,7 +31,7 @@ if(~exist('order', 'var') || order < 0)
 	order = 1;
 end
 
-if(~exist('cut', 'var') || cut < 1)
+if(~exist('cut', 'var') || (isscalar(cut) && cut < 1) || isempty(cut))
     cut = 1;
 end
 
@@ -42,7 +42,11 @@ end
 points = (1:s(1))'; % Initialize the "t" vector to have all the points
 
 % Get the polynomial fits
-p = cell2mat(arrayfun(@(x)polyfit(points(cut:end), in(cut:end, x), order), 1:prod(s(2:end)) ,'UniformOutput', false)');
+if(isscalar(cut))
+    p = cell2mat(arrayfun(@(x)polyfit(points(cut:end), in(cut:end, x), order), 1:prod(s(2:end)) ,'UniformOutput', false)');
+else
+    p = cell2mat(arrayfun(@(x)polyfit(points(cut), in(cut, x), order), 1:prod(s(2:end)), 'UniformOutput', false)');
+end
 
 % Get the output array
 out = cell2mat(arrayfun(@(x)in(:, x)-polyval(p(x, :), points), 1:prod(s(2:end)), 'UniformOutput', false));

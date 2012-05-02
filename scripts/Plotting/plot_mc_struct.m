@@ -1,4 +1,4 @@
-function plot_mc_struct(struct, point, fft, spans)
+function plot_mc_struct(struct, point, fft, spans, first)
 % Plots the struct array.
 %
 % Points will be interpreted as:
@@ -20,9 +20,28 @@ function plot_mc_struct(struct, point, fft, spans)
 %
 % Default is [-1, -2], pass anything below -2 or anything that's not an int
 % to for this behavior.
+%
+% If 'first' is a scalar logical positive, it interprets all positive 
+% values as, "plot the first (x) entries in this dimensions. If it's a 
+% vector, it's element-wise evaluation.
+%
+% Usage:
+% plot_mc_struct(struct, point, fft, spans, first);
 
 if(~exist('point', 'var') || ~isnumeric(point) || ~isempty(find(point < -3, 1, 'first')))
    point = [-1, -2]; 
+end
+
+if(~exist('first', 'var'))
+    first = false;
+else
+    first = logical(first);
+end
+
+if(isscalar(first))
+   first = repmat(first, size(point));
+elseif(length(first) < length(point))
+   first(end:length(point)) = false; 
 end
 
 e = logical(arrayfun(@(x)(x == -2 || x == -3), point));
@@ -53,7 +72,11 @@ j = 0;
 l = length(size(data));
 for i = 1:length(point)
     if(point(i) > 0)
-        cmd = sprintf('%s,%d', cmd, point(i));
+        if(~first(i))
+            cmd = sprintf('%s,%d', cmd, point(i));
+        else
+            cmd = sprintf('%s,1:%d', cmd, point(i));
+        end
         j = j+1;
     elseif(point(i) > -2)
         cmd = [cmd ',:'];  %#ok
