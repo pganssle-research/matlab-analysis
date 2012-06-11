@@ -31,8 +31,14 @@ end
 
 % Scale all the stuff appropriately
 s = num2cell(s);
-out = zeros(s{2:end});
-stdev = zeros(s{2:end});
+
+if(size(s) > 1)
+    out = zeros(s{2:end});
+    stdev = zeros(s{2:end});
+else
+    out = zeros(s{2:end}, 1);
+    stdev = zeros(s{2:end}, 1);
+end
 
 out(:) = arrayfun(@(x)mean(data(start_point:end_point, x)), 1:length(data(1, :)));
 stdev(:) = arrayfun(@(x)mean(data(start_point:end_point, x)), 1:length(data(1, :)));

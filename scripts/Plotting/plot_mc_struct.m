@@ -1,4 +1,4 @@
-function plot_mc_struct(struct, point, fft, spans, first)
+function plot_mc_struct(struct, point, fft, spans, first, span)
 % Plots the struct array.
 %
 % Points will be interpreted as:
@@ -59,15 +59,31 @@ else
         struct = add_fft(struct);
     end
     
+    x = struct.f; 
+    
     data = struct.fft;
-    x = struct.f;
+    
+    if(fft == 1)
+        if(isfield(struct, 'disp') && isfield(struct.disp, 'phase') && length(struct.disp.phase) == 3)
+            phase = fliplr(pi*struct.disp.phase/180);
+            n = size(data(:, :), 2);
+            phasecor = (exp(-1i*polyval(phase, x)))';
+
+            for i = 1:n
+                data(:, i) = data(:, i).*phasecor;
+            end
+        
+        end
+        
+        data = real(data);
+    end
 end
 
 for i = find(point == -1)
     data = mean(data, i+1);
 end 
-
 cmd = 'squeeze(data(:';
+
 j = 0;
 l = length(size(data));
 for i = 1:length(point)
@@ -117,10 +133,35 @@ end
 
 plot(x, data(:, :));
 
+if(isfield(struct, 'FileName'))
+   title(struct.FileName); 
+end
 
-
-
-
+if(exist('span', 'var'))
+    if(span(1) > span(2))
+        xmax = span(1);
+        xmin = span(2);        
+    elseif(span(2) > span(1))
+        xmax = span(2);
+        xmin = span(1);        
+    else
+        return;
+    end
+    
+    [~, mini] = min(abs(x-xmin));
+    [~, maxi] = min(abs(x-xmax));
+    
+    if(mini == maxi)
+        return;
+    end
+    
+    ymax = max(max(data(mini:maxi, :)));
+    ymin = min(min(data(mini:maxi, :)));
+    
+    padding = (ymax-ymin)*0.05;
+    
+    axis([xmin, xmax, ymin-padding, ymax+padding]);
+end
 
 
 

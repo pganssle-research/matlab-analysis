@@ -75,7 +75,76 @@ pattern = ['<a href="matlab:getTableFromWeb\(' num2str(tableID) '\)'];
 
 % Find data from the table
 [s e tok match] = regexp(pageString, [pattern '.*?<table[^>]*>.*?(<tr.*?>).*?</table[^>]*>' ], 'once');
+
 anyData = strtrim(regexprep(match, '<.*?>', ''));
+anyData = strtrim(regexprep(anyData, '\(home page\)', ''));
+[~, ~, ~, email] = regexp(match, '<a href=\"javascript:reantispam\(.*?\);\">.*?</a>', 'tokens');
+
+email = {};
+name = {};
+cat = {};
+url = {};
+
+m = 'notempty';
+mmatch = match;
+i = 1;
+while(~isempty(m))
+   [~, e, ~, m] = regexp(mmatch, '<tr.*?</tr>', 'once');
+   
+   mmatch(1:e) = [];
+      
+   % Email address and URL
+   nem = regexp(m, '<a href=\"javascript:reantispam\(''(?<first>.*?)''\s*,\s*''(?<last>.*?)''\);\">(?<name>.*?)</a>', 'names');
+   urlm = regexp(m, '\(<a href=["''](?<url>.*?)["'']>.*?</a>\)', 'names');
+   
+   if(isempty(nem))
+      if(~isempty(url))
+         nem = regexp(m, '<td>\s*(?<name>.*?)\s*\(<a', 'names');
+      else
+         nem = regexp(m, '<td>\s*(<?name>.*?)\s*</td>', 'names'); 
+      end
+   end
+   
+   if(isempty(nem) || isempty(deblank(nem.name)))
+      continue; 
+   end
+   
+   em = [];
+   u = [];
+   cval = [];
+   
+   if(~isempty(urlm))
+       if(iscell(urlm.url))
+           u = urlm.url{1};
+       else
+           u = urlm.url;
+       end
+   end
+   
+   if(isfield(nem, 'first'))
+      em = deblank([nem.first, '@', nem.last]); 
+   end
+   
+   email{i} = em;
+   url{i} = u;
+   name{i} = nem.name;
+   
+   
+   % Currently At
+   catm = regexp(m, '<b>Currently At</b>:\s*(?<cat>.*?)\s*</div>', 'names');
+   if(~isempty(catm))
+        cval = catm.cat;
+   end
+   
+   
+   cat{i} = cval;
+   
+   i = i+1;
+   
+   if(i == 30)
+      a = 4; 
+   end
+end
 
 if(isempty(anyData))
     r = regexp(pageString, [pattern '.*?</table><table[^>]*>(.*?)</table'], 'tokens', 'once');

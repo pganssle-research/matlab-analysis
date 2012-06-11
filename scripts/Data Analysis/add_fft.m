@@ -19,7 +19,7 @@ out = process_data(in, poly_order, cut, apod_lb);
 
 % Apply the fourier transform.
 sr = out.prog.sr;
-np_fft = 2^(ceil(log2(size(out.mdata, 1)))+1);
+np_fft = 2^(ceil(log2(size(out.mdata, 1)))+2);
 
 f = linspace(0, sr/2, np_fft/2);
 s = fft(out.mdata(:, :), np_fft);

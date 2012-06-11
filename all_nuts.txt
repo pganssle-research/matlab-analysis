@@ -1,0 +1,1161 @@
+<?xml verison="1.0" standalone="yes" ?>
+<pinenut
+name="Jerome Ackerman"
+emailn="jerry" emaild="nmr.MGH.Harvard.edu"
+cat="Department of Radiology, Harvard Medical School"
+url="http://www.nmr.mgh.harvard.edu/~jerry/"
+/>
+<pinenut
+name="Arnold Adam"
+emailn="arnold.adam" emaild="tv.clausthal.de"
+cat="Clausthal Univ. of Technology, Institute of Inorganic &amp; Analytical Chemistry"
+url="http://www.studium.tu-clausthal.de/studienangebot/natur-und-materialwissenschaften/chemie-mas"
+/>
+<pinenut
+name="Yakir Aharonov"
+emailn="yakir" emaild="post.tau.ac.il"
+cat="Tel Aviv University"
+url="http://www.tau.ac.il/~quantum/people.html"
+/>
+<pinenut
+name="Stuart Alison"
+emailn="sallison" emaild="gsu.edu"
+cat="Department of Chemistry, Georgia State University"
+url="http://chemistry.gsu.edu/faculty/Allison/"
+/>
+<pinenut
+name="Mohamed Ali Alsanoosi
+"
+cat="King Abdulaziz University"
+url="http://www.kau.edu.sa/home_ENGLISH.aspx"
+/>
+<pinenut
+name="Sasa Antonijevic"
+emailn="sasa.antonijevic" emaild="gmail.com"
+cat="Home"
+url="http://www.antonijevic.org"
+/>
+<pinenut
+name="Muhammad Sabieh Anwar"
+emailn="sabieh" emaild="lums.edu.pk"
+cat="Lahore Univ. of Management Sciences"
+url="http://sse.lums.edu.pk/faculty.htm"
+/>
+<pinenut
+name="Stephan Appelt"
+emailn="st.appelt" emaild="fz-juelich.de"
+cat="Central Institute for Electronics"
+url="http://www.fz-juelich.de/zel/zel_home"
+/>
+<pinenut
+name="Matthew Augustine"
+emailn="augustine" emaild="chem.ucdavis.edu"
+cat="Department of Chemistry, UC Davis"
+url="http://chemgroups.ucdavis.edu/~augustine/"
+/>
+<pinenut
+name="Claudia Avalos"
+emailn="cavalos3" emaild="gmail.com"
+cat="UC Berkeley"
+/>
+<pinenut
+name="Vik Bajaj"
+emailn="vikbajaj" emaild="gmail.com"
+cat="UC Berkeley"
+/>
+<pinenut
+name="Jay Baltisberger"
+emailn="jay_baltisberger" emaild="berea.edu"
+cat="Department of Chemistry, Berea College"
+url="http://chemistry.berea.edu/balt.php"
+/>
+<pinenut
+name="Eyal Barash
+"
+cat="Aptuit"
+url="http://www.aptuit.com/en/AboutUs.aspx"
+/>
+<pinenut
+name="Geoffrey A Barrall"
+emailn="geoff" emaild="qm.com"
+cat="Electronic Bio Sciences, LLC"
+url="http://electronicbio.com/default.asp"
+/>
+<pinenut
+name="Jean Baum"
+emailn="Jbaum" emaild="rci.rutgers.edu"
+cat="Rutgers University, Dept. Chemistry"
+url="http://rutchem.rutgers.edu/baum_jean"
+/>
+<pinenut
+name="Marianne Bausch-Koenig"
+emailn="Marianne.Bausch-Koenig-1" emaild="lux.dupont.com"
+cat="DuPont-Teijin Films (Luxembourg) S.A."
+/>
+<pinenut
+name="Misha Berger"
+emailn="mberger4" emaild="gmail.com"
+cat="UC Berkeley"
+/>
+<pinenut
+name="Robert Bergman
+"
+cat="UCB Chemistry"
+url="http://www.cchem.berkeley.edu/rgbgrp/index.html"
+/>
+<pinenut
+name="Anthony Bielecki"
+emailn=" 	bielecki" emaild="mit.edu"
+cat="MIT- Francis Bitter Magnet Laboratory"
+url="http://web.mit.edu/fbml/directory.shtml"
+/>
+<pinenut
+name="Angelo Bifone"
+emailn="angelo.2.bifone" emaild="gsk.com"
+cat="Glaxo Smith Kline Research Centre"
+url="http://www.gsk.com/research/index.htm"
+/>
+<pinenut
+name="Hans-Marcus Ludwig Bitter"
+emailn="hbitter" emaild="biospect.com"
+cat="Biospect, Inc."
+url="http://www.alacrastore.com/company-snapshot/Biospect_Inc-2557938"
+/>
+<pinenut
+name="Bruce Black"
+emailn="bblack" emaild="flhlaw.com"
+cat="<a href="http://www.flhlaw.com/news/xprNewsDetail.aspx?xpST=NewsDetail&amp;news=51">Frommer Lawrence &amp; Haug</a>"
+url="flh.com"
+/>
+<pinenut
+name="Wyndham Bo Blanton"
+emailn="bo" emaild="theaddedones.com"
+cat="Far Far Away"
+url="http://theaddedones.com"
+/>
+<pinenut
+name="Louis Bouchard"
+emailn="louis.bouchard" emaild="gmail.com"
+cat="UCLA"
+/>
+<pinenut
+name="Clifford R. Bowers"
+emailn="bowers" emaild="chem.ufl.edu"
+cat="University of Florida"
+url="http://www.chem.ufl.edu/~bowers/index.html"
+/>
+<pinenut
+name="Eike Brunner"
+emailn="eike.brunner" emaild="biologie.uni-regensburg.de"
+cat="University of Regensburg"
+url="http://www.biologie.uni-regensburg.de/Biophysik/Kalbitzer/brunner/e/eindex.html"
+/>
+<pinenut
+name="Dmitry Budker"
+emailn="budker" emaild="socrates.berkeley.edu"
+cat="UCB Physics"
+url="http://socrates.berkeley.edu/~budker"
+/>
+<pinenut
+name="Lucy Bull"
+emailn="lbull" emaild="cnrs-imn.fr"
+cat="IMN Nantes"
+url="http://www.cnrs-imn.fr/"
+/>
+<pinenut
+name="Scott Burt"
+emailn="scott_burt" emaild="byu.edu"
+cat="Brigham Young University"
+url="/theses/burt.pdf"
+/>
+<pinenut
+name="Marianne Busch-Koenig"
+emailn="Marianne.Bausch-Koenig-1" emaild="lux.dupont.com"
+cat="DuPont-Teijin Films (Luxembourg) S.A."
+url="http://www.dupont.lu/"
+/>
+<pinenut
+name="Seth Bush"
+emailn="sbush" emaild="calpoly.edu"
+cat="California Polytechnic State University, San Luis Obispo, CA"
+url="http://chemweb.calpoly.edu/sbush/"
+/>
+<pinenut
+name="Mark Butler"
+emailn="mcbutler" emaild="berkeley.edu"
+cat="UC Berkeley"
+/>
+<pinenut
+name="Stefano Caldarelli"
+emailn="s.caldarelli" emaild="univ-cezanne.fr"
+url="http://www.ism2.univ-cezanne.fr/permanents/CALDARELLI.php"
+/>
+<pinenut
+name="Antonino Mario Cassar"
+emailn="antonio.cassara" emaild="roma1.infn.it"
+cat="La Sapienza, Rome"
+/>
+<pinenut
+name="Franca Castiglione"
+emailn="fcastiglione" emaild="vicuron.it"
+cat="Vicuron Pharmaceuticals Inc."
+/>
+<pinenut
+name="Jih-Wen Chang"
+emailn="jeff.chang" emaild="akzo-nobel.com"
+cat="Florida Chemical Company"
+/>
+<pinenut
+name="Ye Chaohui
+"
+cat="Chinese Academy Sciences, Wuhan Inst. Physics &amp; Mathematics"
+url="http://sourcedb.cas.cn/sourcedb_wipm_cas/yw/ywrck/fas/"
+/>
+<pinenut
+name="Thibault Charpentier"
+emailn="thibault.charpentier" emaild="cea.fr"
+cat="Commissariat a l'Energie Atomique"
+url="http://translate.googleusercontent.com/translate_c?hl=en&amp;sl=fr&amp;tl=en&amp;u=http://www-centre-saclay.cea.fr/&amp;rurl=translate.google.com&amp;twu=1&amp;usg=ALkJrhhup7BeAKW-vpS3eGwLNpG-qwMWVQ"
+/>
+<pinenut
+name="Lana Joleen Chavez"
+emailn="lana.joleen" emaild="gmail.com"
+cat="ABQMR"
+/>
+<pinenut
+name="Bradley F Chmelka"
+emailn="bradc" emaild="engineering.ucsb.edu"
+cat="UC Santa Barbara"
+url="http://www.chemengr.ucsb.edu/people/faculty/chmelka.html"
+/>
+<pinenut
+name="Herman Cho"
+emailn="hm.cho" emaild="pnl.gov"
+cat="Pacific Northwest Laboratory"
+url="http://emslbios.pnl.gov/id/cho_hm"
+/>
+<pinenut
+name="Isaac Chuang"
+emailn="ichuang" emaild="mit.edu"
+cat="MIT Quanta Group"
+url="http://web.mit.edu/~cua/www/quanta/"
+/>
+<pinenut
+name="John Clarke"
+emailn="jclarke" emaild="physics.berkeley.edu"
+cat="UCB Physics"
+url="http://socrates.berkeley.edu/~jclarke2"
+/>
+<pinenut
+name="Chip W. Crawford"
+emailn="cwcraw" emaild="gmail.com"
+cat="NanoMR"
+/>
+<pinenut
+name="Francois Creuzet"
+emailn="creuzet" emaild="frcirp81"
+/>
+<pinenut
+name="Louis Charles de Menorval"
+emailn="lcdemorval" emaild="univ-montp2.fr"
+cat="Univ. de Montpellier 2"
+/>
+<pinenut
+name="Susan De Paul"
+emailn="depaul" emaild="gmx.ch"
+cat="Solvias AG"
+url="susan.depaul@solvias.com"
+/>
+<pinenut
+name="Dr. Ricardo de Souza"
+emailn="res" emaild="df.ufpe.br"
+/>
+<pinenut
+name="Thomas de Swiet"
+emailn="thomas.deswiet" emaild="varianinc.com"
+cat="Varian Inc."
+/>
+<pinenut
+name="David deGraw"
+emailn="david.de.graw" emaild="morganstanley.com"
+cat="Morgan Stanley"
+/>
+<pinenut
+name="Vasiliki Demas"
+emailn="vdemas" emaild="t2biosystems.com"
+cat="T2 Biosystems"
+/>
+<pinenut
+name="Ivan Dimitrov"
+emailn="dimitrov" emaild="mail.med.upenn.edu"
+cat="Univeristy of Pennsylvania"
+/>
+<pinenut
+name="Marcus Hofheins Donaldson"
+emailn="mdonaldson" emaild="slb.com"
+cat="Schlumberger-Doll Research"
+/>
+<pinenut
+name="Gary Drobny"
+emailn="Drobny" emaild="chem.washington.edu"
+cat="University of Washington"
+url="http://depts.washington.edu/chem/people/faculty/drobny.html"
+/>
+<pinenut
+name="Ray Dupree"
+emailn="r.dupree" emaild="warwick.ac.uk"
+cat="University of Warwick"
+url="http://www2.warwick.ac.uk/fac/sci/physics/staff/academic/rdupree/"
+/>
+<pinenut
+name="Margaret Eastman"
+emailn="meastman" emaild="chem.okstate.edu"
+cat="Oklahoma State University"
+url="http://chem.okstate.edu/index.php?option=com_contact&amp;task=view&amp;contact_id=21&amp;Itemid=72"
+/>
+<pinenut
+name="Richard Eckman"
+emailn="reckman" emaild="goodwinproctor.com"
+cat="Goodwin Proctor LLP"
+/>
+<pinenut
+name="Lyndon Emsley"
+emailn="Lyndon.Emsley" emaild="ens-lyons.fr"
+cat="Ecole Normale Superieure de Lyon"
+url="http://perso.ens-lyon.fr/lyndon.emsley/Professor%20Lyndon%20Emsley.html"
+/>
+<pinenut
+name="Matthias Ernst"
+emailn="maer" emaild="nmr.phys.chem.ethz.edu"
+cat="Laboratorium fur Physikalische Chemie"
+url="http://www.nmr.ethz.ch/~maer/"
+/>
+<pinenut
+name="Ian Farnon"
+emailn="ifarnan" emaild="esc.cam.ac.uk"
+cat="Centre de Rechersche sur"
+/>
+<pinenut
+name="Matthew B. Francis"
+emailn="francis" emaild="cchem.berkeley.edu"
+cat="UCB"
+url="http://wasabi.cchem.berkeley.edu/"
+/>
+<pinenut
+name="John Mark Franck"
+emailn="franck" emaild="gmail.com"
+cat="UC Santa Barbara"
+url="/theses/franck.pdf"
+/>
+<pinenut
+name="Lucio Frydman"
+emailn="lucio.frydman" emaild="weizmann.ac.il"
+cat="Weizmann Institute of Sciences"
+/>
+<pinenut
+name="Hideaki Fujiwara"
+emailn="fujiwara" emaild="sahs.med.osaka-u.ac.jp"
+cat="Osaka Univ"
+/>
+<pinenut
+name="Holly C Gaede"
+emailn="hgaede" emaild="mail.chem.tamu.edu"
+cat="Texas A&amp;M"
+/>
+<pinenut
+name="Sheryl Gann"
+emailn="Sheryl.Gann" emaild="dhs.gov"
+cat="Department of Homeland Security"
+/>
+<pinenut
+name="Paul J. Ganssle"
+emailn="pganssle" emaild="berkeley.edu"
+cat="UC Berkeley"
+/>
+<pinenut
+name="Joel Garbow"
+emailn="garbow" emaild="wuchem.wustl.edu"
+cat="Washington U. Sch of Medicine"
+/>
+<pinenut
+name="Sandra P Garcia"
+emailn="spgarcia24" emaild="gmail.com"
+cat="UC Davis"
+/>
+<pinenut
+name="Allen N. Garroway"
+emailn="Garroway" emaild="nrl.navy.mil"
+cat="US Dept. of the Navy"
+/>
+<pinenut
+name="Miriam Gochin"
+emailn="Miriam.gochin" emaild="tu.edu"
+cat="Touro University, Osteopathic Medicine"
+/>
+<pinenut
+name="Boyd Goodson"
+emailn="bgoodson" emaild="chem.siu.edu"
+cat="Southern Illinois University"
+/>
+<pinenut
+name="Philip Grandinetti"
+emailn="grandinetti.1" emaild="osu.edu"
+cat="Ohio State University"
+/>
+<pinenut
+name="Josef Granwehr"
+emailn="joga" emaild="waugh.cchem.berkeley.edu"
+cat="University of Nottingham, UK"
+/>
+<pinenut
+name="Dominic Michael Graziani"
+emailn="dgraziani" emaild="berkeley.edu"
+cat="UC Berkeley"
+/>
+<pinenut
+name="Jin Guo"
+emailn="jinguo" emaild="berkeley.edu"
+cat="UC Berkeley"
+/>
+<pinenut
+name="Erwin Hahn"
+emailn="hahn" emaild="physics.berkeley.edu"
+/>
+<pinenut
+name="Nick Wm Halpern-Manners"
+emailn="nick_hm" emaild="berkeley.edu"
+cat="UC Berkeley"
+/>
+<pinenut
+name="SongI Han"
+emailn="songi" emaild="chem.ucsb.edu"
+cat="UC Santa Barbara, Dept of Chemistry and Biochemistry"
+/>
+<pinenut
+name="Elad Harel"
+emailn="elharel" emaild="uchicago.edu"
+cat="University of Chicago James Franck Institute Postdoc Fellow"
+/>
+<pinenut
+name="Robert H. Havlin"
+emailn="rhavlin" emaild="helix.nih.gov"
+/>
+<pinenut
+name="Henrike Heise"
+emailn="h.heise" emaild="fz-juelich.de"
+cat="Heinrich-Heine-Universitaet Duesseldorf"
+url="http://henrike-heise.de/"
+/>
+<pinenut
+name="Jonathan Heller"
+emailn="rellehj" emaild="yahoo.com"
+cat="Biospect, Inc."
+/>
+<pinenut
+name="Christian Hilty"
+emailn="chilty" emaild="mail.chem.tamu.edu"
+cat="Texas A &amp; M"
+url="http://www.chem.tamu.edu/rgroup/hilty"
+/>
+<pinenut
+name="Paul Hodgkinson"
+emailn="paul.hodgkinson" emaild="durham.ac.uk"
+cat="University of Durham"
+url="http://www.dur.ac.uk/paul.hodgkinson/"
+/>
+<pinenut
+name="Mei Hong"
+emailn="mhong" emaild="iastate.edu"
+cat="Iowa State University"
+url="http://www.public.iastate.edu/~hongweb/"
+/>
+<pinenut
+name="Deidre Hugi-Cleary"
+emailn="deirdre.hugi" emaild="unine.ch"
+cat="University Neuchatel"
+/>
+<pinenut
+name="Rebecca Corina Jachmann"
+emailn="gbright1" emaild="gmail.com"
+cat="Haliburton"
+/>
+<pinenut
+name="Alyse Jacobson"
+emailn="AMJacobson" emaild="lbl.gov"
+cat="Administrator"
+/>
+<pinenut
+name="Raz Jelinek"
+emailn="razj" emaild="bgumail.bgu.ac.il"
+cat="Ben Gurion University"
+url="http://www.bgu.ac.il/~razj/"
+/>
+<pinenut
+name="Alexej Jerschow"
+emailn="Alexej.Jerschow" emaild="nyu.edu"
+cat="NYU"
+url="http://www.nyu.edu/projects/jerschow"
+/>
+<pinenut
+name="Jonathan A. Jones"
+emailn="jonathan.jones" emaild="qubit.org"
+cat="Oxford University"
+url="http://nmr.physics.ox.ac.uk"
+/>
+<pinenut
+name="Paul Jonsen"
+emailn="paul.jonsen" emaild="talaverascience.com"
+cat="Talavera Science"
+/>
+<pinenut
+name="Lana G. Kaiser"
+emailn="lkaiser" emaild="itsa.ucsf.edu"
+cat="VA Medical Center Magnetic Resonance Unit"
+/>
+<pinenut
+name="Daniel Kennedy"
+emailn="daniel.kennedy" emaild="berkeley.edu"
+cat="UC Berkeley"
+/>
+<pinenut
+name="Gwendal Kervern"
+emailn="gkervern" emaild="lbl.gov"
+cat="UC Berkeley"
+/>
+<pinenut
+name="Aleksandra Kijac"
+emailn="alekskijac" emaild="gmail.com"
+cat="UC Berkeley"
+/>
+<pinenut
+name="Mark George Kubinec"
+emailn="mark.kubinec" emaild="gmail.com"
+cat="Consultant"
+/>
+<pinenut
+name="Russell Larsen"
+emailn="russell-larsen" emaild="uiowa.edu"
+cat="Univ. Iowa, Dept. Chemistry"
+/>
+<pinenut
+name="David Douglas Laws"
+emailn="dlaws" emaild="lawrenceville.org"
+cat="The Lawrenceville School"
+/>
+<pinenut
+name="Yung-Ya Lin"
+emailn="yylin" emaild="chem.ucla.edu"
+cat="UCLA"
+url="http://www.chem.ucla.edu/dept/Faculty/yylin/"
+/>
+<pinenut
+name="Kai Liu"
+emailn="kai.liu" emaild="pfizer.com"
+cat="Pfizer PGRD"
+/>
+<pinenut
+name="Shang-Bin Liu"
+emailn="sbliu" emaild="sinica.edu.tw"
+cat="Institute of Atomic &amp; Molecular Sciences"
+/>
+<pinenut
+name="John W. Logan"
+emailn="mailto:jlogan" emaild="science.sjsu.edu"
+cat="San Jose State University"
+url="http://www.sjsu.edu/faculty_and_staff/faculty_detail.jsp?id=1092"
+/>
+<pinenut
+name="Henry Long"
+emailn="henry_long" emaild="yahoo.com"
+cat="Cambridge Research Center"
+/>
+<pinenut
+name="Tom Lowery"
+emailn="tjlowery" emaild="gmail.com"
+cat="T2 Biosystems"
+/>
+<pinenut
+name="Guenther Majer"
+emailn="majer" emaild="vaxph.mpi-stuttgard.mpg.de"
+cat="Max-Planck-Institute fuer Metallforschung"
+url="mjaer@nmr.mpi.stuttgart.mpg.de"
+/>
+<pinenut
+name="Malgorzata Marjanska"
+emailn="gosia" emaild="cmrr.umn.edu"
+cat="University of Minnesota, Center for Magnetic Resonance Research and Department of Radiology"
+/>
+<pinenut
+name="Rachel Wagner Martin"
+emailn="rwmartin" emaild="uci.edu"
+cat="UC Irvine"
+url="http://www.faculty.uci.edu/scripts/UCIFacultyProfiles/detailMBB.cfm?ID=5277"
+/>
+<pinenut
+name="Shigeru Matsui"
+emailn="matsui" emaild="bk.tsukuba.ac.jp"
+cat="Institute of Applied Physics, University of Tsukuba"
+/>
+<pinenut
+name="Tanya Mazur"
+emailn="TMazur" emaild="gibsondunn.com"
+cat="Gibson, Dunn &amp; Crutcher LLP"
+url="http//:gibsondunn.com"
+/>
+<pinenut
+name="Alon McCormick"
+emailn="mccormic" emaild="umn.edu"
+cat="Department of Chemical Engineering, Univeristy of Minnesota"
+/>
+<pinenut
+name="Thomas Meersmann"
+emailn="meer" emaild="lamar.colostate.edu"
+cat="Colorado State University"
+url="http://franklin.chm.colostate.edu/meerwave/"
+/>
+<pinenut
+name="Michael Mehring"
+emailn="m.mehring" emaild="physik.uni-stuttgart.de"
+cat="University of Stuttgart"
+url="http://www.pi2.uni-stuttgart.de/official/MMgroup/index_e.html"
+/>
+<pinenut
+name="Tyler Kenneth Meldrum"
+emailn="TKMeldrum" emaild="lbl.gov"
+cat="UC Berkeley"
+/>
+<pinenut
+name="Xi Meng"
+emailn="xmeng33" emaild="gmail.com"
+cat="Varian China"
+/>
+<pinenut
+name="Carlos Andres Meriles"
+emailn="cmeriles" emaild="sci.ccny.cuny.edu"
+cat="City College of New York"
+url="http://www.sci.ccny.cuny.edu/physics/faculty/Meriles.htm"
+/>
+<pinenut
+name="David Michalak"
+emailn="damichalak" emaild="gmail.com"
+cat="Intel"
+/>
+<pinenut
+name="John M Millar"
+emailn="john.m.millar" emaild="exxon.spint.com"
+cat="Baytown Polymers Center, Exxon Chemical Company"
+/>
+<pinenut
+name="Grainne Mary Moran"
+emailn=" g.moran" emaild="unsw.edu.au"
+cat="University of New South Wales"
+url="http://www.chem.unsw.edu.au/staffprofiles/moran.html"
+/>
+<pinenut
+name="Morgan Paul Moschetti"
+emailn="moschemp" emaild="dirac.cchem.berkeley.edu"
+cat="UC Berkeley Geology Dept."
+/>
+<pinenut
+name="Adam J Moule"
+emailn="amoule" emaild="ucdavis.edu"
+cat="UC Davis, Chemical Engineering &amp; Materials Science"
+/>
+<pinenut
+name="Karl Mueller"
+emailn="ktm2" emaild="psu.edu"
+cat="Department of Chemistry, Pennsylvania State University"
+url="http://research.chem.psu.edu/ktmgroup/"
+/>
+<pinenut
+name="Shaul Mukamel"
+emailn="smukamel" emaild="uci.edu"
+cat="UC Irvine"
+url="http://mukamel.ps.uci.edu/bio.htmlShau"
+/>
+<pinenut
+name="Michael Munowitz"
+emailn="mmunowitz" emaild="ameritech.net"
+cat="Science Writer"
+/>
+<pinenut
+name="Eric Munson"
+emailn="munson" emaild="ku.edu"
+cat="Univeristy of Kansas"
+url="http://www.hbc.ku.edu/phch/faculty-munson.htm"
+/>
+<pinenut
+name="James Murdoch"
+emailn="j.murdoch" emaild="tmriusa.com"
+cat="Toshiba Medical Research Institute USA"
+/>
+<pinenut
+name="J. Peter Mustonen"
+emailn="jpmustonen" emaild="berkeley.edu"
+cat="UC Berkeley"
+/>
+<pinenut
+name="Daniel Nanz"
+emailn="daniel.nanz" emaild="usz.ch"
+cat="University Hospital Zurich"
+/>
+<pinenut
+name="Peter Neidig"
+emailn="Peter.Neidig" emaild="bruker.de"
+cat="Bruker Analytische Messtechnik, Software"
+/>
+<pinenut
+name="Ulla Gro Nielsen"
+emailn="unielsen" emaild="notes.cc.sunysb.edu"
+cat="SUNY Stony Brook"
+url="http://greymatter.chem.sunysb.edu/ulla%20web/UGN_CV_web.htm"
+/>
+<pinenut
+name="Gail Odom"
+emailn="gail.odom" emaild="berkeley.edu"
+cat="Administrator"
+/>
+<pinenut
+name="Zbigniew Olejniczak"
+emailn="olejniczak" emaild="vsb01.ifj.edu.pl"
+cat="Institute of Nuclear Physics, Department of Nuclear Radiospectroscopy"
+/>
+<pinenut
+name="Kanna Palaniappan"
+emailn="kannap" emaild="berkeley.edu"
+cat="UCB"
+/>
+<pinenut
+name="Jeffrey L. Paulsen"
+emailn="jlpaulsen" emaild="gmail.com"
+cat="Schlumberger-Doll"
+/>
+<pinenut
+name="John Pearson"
+emailn="pearson" emaild="neuro.duke.edu"
+cat="Duke University"
+/>
+<pinenut
+name="Zheng-Yu Peng"
+emailn="peng" emaild="sun.uchc.edu"
+cat="University of Conneticut Health Center"
+/>
+<pinenut
+name="Charles Pennington"
+emailn="penningt" emaild="mps.ohio-state.edu"
+cat="Department of Physics, Ohio State University"
+url="http://www.physics.ohio-state.edu/~penningt/"
+/>
+<pinenut
+name="Kimberly L. Pierce"
+emailn="KPierce" emaild="gmail.com"
+cat="Intel, Portland OR"
+/>
+<pinenut
+name="Tanya Pietrass"
+emailn="tanja" emaild="nmt.edu"
+cat="New Mexico Tech"
+/>
+<pinenut
+name="Alex Pines"
+emailn="pines" emaild="cchem.berkeley.edu"
+cat="UB Berkeley"
+/>
+<pinenut
+name="Stanley Prusiner
+"
+cat="UCSF Neuroscience"
+url="http://www.ucsf.edu/neurosc/faculty/neuro_prusiner.html"
+/>
+<pinenut
+name="Chunqi Qian"
+emailn="qianc2" emaild="ninds.nih.gov"
+cat="NIH/NINDS"
+/>
+<pinenut
+name="Daniel Raftery"
+emailn="raftery" emaild="purdue.edu"
+cat="Purdue University"
+/>
+<pinenut
+name="Matt Ramirez"
+emailn="mramirez" emaild="berkeley.edu"
+cat="UC Berkeley"
+/>
+<pinenut
+name="Jeffrey Reimer"
+emailn="reimer" emaild="socrates.berkeley.edu"
+url="http://india.cchem.berkeley.edu/~reimer"
+/>
+<pinenut
+name="Linda Reven"
+emailn="linda.reven" emaild="mcgill.ca"
+cat="McGill University"
+/>
+<pinenut
+name="Hattie (Ziegler) Ring"
+emailn="hziegler" emaild="berkeley.edu"
+cat="UC Berkeley"
+/>
+<pinenut
+name="Toomas Room"
+emailn="roomtom" emaild="kbfi.ee"
+cat="National Institute of Chemical Physics and Biophysics"
+/>
+<pinenut
+name="Mark Rosen"
+emailn="merosen" emaild="mninter.net"
+cat="Teradyne,Inc."
+/>
+<pinenut
+name="David Rourke"
+emailn="david.rourke" emaild="nottingham.ac.uk"
+cat="Nottingham University"
+/>
+<pinenut
+name="Steven P. Rucker"
+emailn="sprucker" emaild="ereni.com"
+cat="Exxon Research &amp; Engineering"
+/>
+<pinenut
+name="E. Janette Ruiz"
+emailn="ejruiz" emaild="yahoo.com"
+cat="Lam Research"
+/>
+<pinenut
+name="Ryong Ryoo"
+emailn="rryoo" emaild="kaist.ac.kr"
+cat="Korea Adv. Inst. of Sci. &amp; Tech."
+url="rryoo.kaist.ac.kr"
+/>
+<pinenut
+name="Joseph Sachleben"
+emailn="jsachleben" emaild="uchicago.edu"
+cat="University of Chicago"
+/>
+<pinenut
+name="Dimitris Sakellariou"
+emailn="dsakellariou" emaild="cea.fr"
+cat="Commissariat a l'Energie Atomique"
+/>
+<pinenut
+name="Freddie Salsbury"
+emailn="salsbufr" emaild="wfu.edu"
+cat="Wake Forest University"
+url="http://bob.olin.wfu.edu"
+/>
+<pinenut
+name="Sunil K Saxena"
+emailn="sksaxena" emaild="pitt.edu"
+cat="University of Pittsburgh"
+url="http://www.chem.pitt.edu/people/faculty.asp?FacID=25"
+/>
+<pinenut
+name="Franz Schilling"
+emailn="franzs83" emaild="gmail.com"
+cat="Technical University Munich"
+/>
+<pinenut
+name="Klaus Schlenga"
+emailn="klaus.schlenga" emaild="brucker.biospin.de"
+cat="Brucker BioSpin"
+/>
+<pinenut
+name="Claudia Schmidt"
+emailn="Claudia.Schmidt" emaild="uni-paderborn.de"
+cat="Universitat Paderborn"
+url="http://chemie.uni-paderborn.de/en/fachgebiete/pc/ak-schmidt/"
+/>
+<pinenut
+name="Klaus Schmidt-Rohr"
+emailn="srohr" emaild="iastate.edu"
+cat="Iowa State University"
+url="http://www.chem.iastate.edu/faculty/Klaus_Schmidt-Rohr/"
+/>
+<pinenut
+name="Leif Schroeder"
+emailn="lschroeder" emaild="fmp-berlin.de"
+cat="Leibniz Inst. for Molecular Pharmacology, Berlin"
+url="http://waugh.cchem.berkeley.edu/~schroeder"
+/>
+<pinenut
+name="Peter Schultz"
+emailn="schultz" emaild="scripps.edu"
+cat="Scripps"
+url="http://schultzweb.scripps.edu"
+/>
+<pinenut
+name="Juliette Anne Seeley"
+emailn="seeleyj" emaild="ll.mit.edu"
+cat="MIT Lincoln Laboratory"
+/>
+<pinenut
+name="Scott Seltzer"
+emailn="seltzer" emaild="berkeley.edu"
+cat="UC Berkeley"
+/>
+<pinenut
+name="Jonathan Sessler"
+emailn="sessler" emaild="mail.utexas.edu"
+cat="University of Texas"
+/>
+<pinenut
+name="Roberto Seydoux"
+emailn="roberto.seydoux" emaild="bruker.ch"
+cat="Bruker Biospin AG"
+/>
+<pinenut
+name="Athan J. Shaka"
+emailn="ajshaka" emaild="uci.edu"
+cat="UC Irvine"
+/>
+<pinenut
+name="Thomas Shattuck"
+emailn="twshattu" emaild="colby.edu"
+cat="Colby College"
+/>
+<pinenut
+name="Chang Shin"
+emailn="csshin" emaild="lbl.gov"
+cat="UC Berkeley"
+/>
+<pinenut
+name="Hyun Doug Shin"
+emailn="shd0907" emaild="berkeley.edu"
+cat="UC Berkeley"
+/>
+<pinenut
+name="Jay Shore"
+emailn="shore" emaild="NMRLAB.SDSTATE.EDU"
+cat="South Dakota State University"
+/>
+<pinenut
+name="David Shykind"
+emailn="david.shykind" emaild="intel.com"
+cat="Intel Corporation"
+/>
+<pinenut
+name="Roberto Simonutti"
+emailn="Roberto.Simonutti" emaild="mater.unimib.it"
+cat="University of Milan - Bicocca, Department of Materials Science"
+/>
+<pinenut
+name="Steven Sinton"
+emailn="steve.sinton" emaild="lmco.com"
+cat="Lockheed Martin Advanced Technogology Center"
+/>
+<pinenut
+name="Monica Smith"
+emailn="monicasmith" emaild="berkeley.edu"
+cat="UC Berkeley"
+/>
+<pinenut
+name="Yi-Qiao Song"
+emailn="ysong" emaild="boston.oilfield.slb.com"
+cat="Sclumberger-Doll Research"
+/>
+<pinenut
+name="Megan Marie Spence"
+emailn="mspense" emaild="pitt.edu"
+cat="University of Pittsburgh, Dept. of Chemistry"
+/>
+<pinenut
+name="Todd Stevens"
+emailn="tkstevens" emaild="berkeley.edu"
+cat="UC Berkeley"
+/>
+<pinenut
+name="Boquin Sun"
+emailn="bsun" emaild="chevrontexaco.com"
+cat="ChevronTexaco"
+/>
+<pinenut
+name="Dieter Suter"
+emailn="dieter.suter" emaild="physik.uni-dortmund.de"
+cat="Universitaet Dortmund"
+url="http://e3.physik.uni-dortmund.de"
+/>
+<pinenut
+name="Pei Tang"
+emailn="tang" emaild="smtp.anes.upmc.edu"
+cat="School of Medicine Dept. of Anesthesiology/CCM University of Pittsburgh"
+/>
+<pinenut
+name="Jau Tang"
+emailn="tang" emaild="smtp.anes.upmc.edu"
+/>
+<pinenut
+name="Jau Tang"
+emailn="jautang" emaild="caltech.edu"
+cat="Cal Tech"
+/>
+<pinenut
+name="Rebecca Taylor"
+emailn="rebecca.taylor" emaild="1mco.com"
+cat="Lockheed Martin Missiles and Space"
+/>
+<pinenut
+name="Thomas Z. Teisseyre"
+emailn="teisseyre" emaild="berkeley.edu"
+cat="UC Berkeley"
+/>
+<pinenut
+name="Dinh Ton That"
+emailn="dton" emaild="etec.com"
+cat="Etec Systems, Inc. System Engineer Division"
+/>
+<pinenut
+name="Thomas Theis"
+emailn="ttheis" emaild="berkeley.edu"
+cat="UC Berkeley"
+/>
+<pinenut
+name="Marco Thomaselli"
+emailn="mato" emaild="nmr. phys.chem.ethz.ch"
+cat="Laboratorium fuer Physikalische Chemie Eidgenoessische Technische Hochschule"
+/>
+<pinenut
+name="David Richard Trease"
+emailn="davidtrease" emaild="berkeley.edu"
+cat="UC Berkeley"
+/>
+<pinenut
+name="Robert Tycko"
+emailn="tycko" emaild="helix.nih.gov"
+cat="National Institute of Health"
+url="http://spin.niddk.nih.gov/tycko/"
+/>
+<pinenut
+name="Jeffry T. Urban"
+emailn="j.t.urban" emaild="gmail.com"
+cat="Institute for Defense analysis"
+/>
+<pinenut
+name="Shimon Vega"
+emailn="civega" emaild="wis.weizmann.ac.il"
+cat="Weizmann Institute of Sciences"
+url="http://www.weizmann.ac.il/chemphys/Vega_group/home.html"
+/>
+<pinenut
+name="Jamie Dale Walls"
+emailn="walls" emaild="chemistry. harvard.edu"
+cat="Harvard University"
+/>
+<pinenut
+name="Shuan-Hu Wang"
+emailn="swang" emaild="sisa.samsung.com"
+/>
+<pinenut
+name="Warren S Warren"
+emailn="warren.warren" emaild="duke.edu"
+cat="Duke University"
+url="http://www.chem.duke.edu/~wwarren/"
+/>
+<pinenut
+name="Daniel Weitekamp"
+emailn="weitekamp" emaild="caltech.edu"
+cat="Caltech"
+url="http://chemistry.caltech.edu/faculty/weitekamp/"
+/>
+<pinenut
+name="David Wemmer"
+emailn="dewemmer" emaild="lbl.gov"
+cat="UC Berkeley"
+url="http://www.cchem.berkeley.edu/wemmer/Home.html"
+/>
+<pinenut
+name="David E Wemmer"
+emailn="DEWemmer" emaild="lbl.gov"
+cat="Structural Biology Division"
+url="http://www.cchem.berkeley.edu/wemmer/Home.html"
+/>
+<pinenut
+name="Ulkrike Werner-Zwanziger"
+emailn="ulli.zwanziger" emaild="dal.ca"
+cat="Dalhousie University"
+/>
+<pinenut
+name="Sungsool Wi"
+emailn="sungsool" emaild="dirac.cchem.berkeley.edu"
+cat="Virginia Polytechnic University"
+/>
+<pinenut
+name="George Wolf"
+emailn="GWolf" emaild="asu.edu"
+cat="Arizona State University"
+url="http://chemistry.asu.edu/faculty/g_wolf.asp"
+/>
+<pinenut
+name="Annjoe Wong-Foy"
+emailn="wongfoy" emaild="lucent.com"
+cat="Lucent"
+/>
+<pinenut
+name="E. Wrenn Wooten"
+emailn="wootenew" emaild="msn.com"
+cat="MSN.com"
+/>
+<pinenut
+name="Yue Wu"
+emailn="yuewu" emaild="physics.unc.edu"
+cat="University of North Carolina at Chapel Hill"
+url="http://www.physics.unc.edu/~yuewu/"
+/>
+<pinenut
+name="Yue Wu"
+emailn="yuewu" emaild="physics.unc.edu"
+cat="University of North Carolina at Chapel Hill"
+/>
+<pinenut
+name="Shoujun Xu"
+emailn="sxu7" emaild="uh.edu"
+cat="U. of Houston"
+/>
+<pinenut
+name="Jeffrey Yarger"
+emailn="jyarger" emaild="gmail.com"
+cat="Arizona State University"
+/>
+<pinenut
+name="Valeriy Yashchuk"
+emailn="yashchuk" emaild="physics.berkeley.edu"
+cat="UCB Physics"
+/>
+<pinenut
+name="James Yesinowski"
+emailn=" yesinowski" emaild="nrl.navy.mil"
+cat="Naval Research Laboratory (Chemistry)"
+/>
+<pinenut
+name="David B Zax"
+emailn="DBZ1" emaild="cornell.edu"
+cat="Cornell University"
+url="http://www.chem.cornell.edu/faculty/index.asp?fac=48"
+/>
+<pinenut
+name="Xin Zhou"
+emailn="xinxhou" emaild="wipm.ac.cn"
+cat="Wuhan Inst. of Physics and Mathematics"
+/>
+<pinenut
+name="Marcia Ziegweid-Stellpflug"
+emailn="marcia.stellpflug" emaild="clorox.com"
+cat="The Clorox Company"
+/>
+<pinenut
+name="Kurt Zilm"
+emailn="kurt.zilm" emaild="yale.edu"
+cat="Yale University"
+url="http://xbeams.chem.yale.edu/GradBroch/html/zilm.htm"
+/>
+<pinenut
+name="Herbert Zimmerman"
+emailn="herzi" emaild="mpimf-heidelberg.mpg.de"
+cat="Max-Planck Institute for Medical Research"
+/>
+<pinenut
+name="Josef W Zwanziger"
+emailn="jzwanzig" emaild="dal.ca"
+cat="Dalhousie University"
+url="http://www.chem.indiana.edu/personnel/faculty/zwanziger-%20gone/zwanziger.htm"
+/>

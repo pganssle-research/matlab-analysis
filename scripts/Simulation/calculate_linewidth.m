@@ -1,12 +1,23 @@
 function [R, RSD, RW] = calculate_linewidth(temp, dims, pps, sdcs, ms)
 % Calculates the linewidth of a cell based on the neon and n2 pressures.
 %
+% Inputs:
+% temp -> In celsius
+% dims -> in cm.
 % pps, sdcs, ms all must be vectors.
 % pps -> Partial pressures
 % sdcs -> Spin-destruction cross-sections
 % ms -> masses
 %
+% Outputs:
+% R -> Overall linewidth
+% RSD -> Linewidth from spin-destruction
+% RW -> Linewidth from wall collisions.
+%
 % T is in celsius
+%
+% Usage:
+% [R, RSD, RW] = calculate_linewidth(temp, dims, pps, sdcs, ms);
 
 if(~exist('sdcs', 'var') || sdcs == 0)
    % By default it's neon and nitrogen
@@ -70,8 +81,6 @@ RW = D*(sum((pi./dims).^2));
 
 R = RW + RSD;
 
+%sqrt(D./R) % This will output the characteristic diffusion length, in cm.
+
 R = R/(2*pi);
-
-
-
-

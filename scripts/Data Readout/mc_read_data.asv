@@ -269,6 +269,10 @@ if(isfield(s, loc))
 			
 			for j = tlspans(i, 1):tlspans(i, 2)
 				if(instrs.flags(j) == 0 && instrs.ts(j) > 20e-3)
+					if(e_t == 0) % Initial time elapsed
+						e_t = calc_span_len(instrs, [sn, tlspans(i,1)-1]);
+					end
+					
 					% Loop located.
 					r_loop = 1;
 					c_l = instrs.ts;
@@ -276,25 +280,56 @@ if(isfield(s, loc))
 			end
 			
 			if(r_loop)
-				l_l = instrs.data(tlspans(i, 1));
 				t_t = calc_span_len(instrs, tlspans(i)); % Get loop length.
-				
-				c_t = t_t/l_l; % Get per-loop length.
-				
-				c_t = c_t * 1000; % In ms;
-				c_l = (c_l*1000)-20; % 20ms of this will be useless.
-				frac = 0.8*(c_l/c_t); % Take 80% of remaining fraction.
-				asym = 0.9;
-			
-				e_t = calc_span_len(instrs, [sn, tlspans(i,1)-1]) + t_t;
-
-				if(e_t > out.prog.np/out.prog.sr)
-					break;
-				end
+				t_t =
 			end
 			
-			
 		end
+		
+		
+	end
+	
+	if(sn >= 0)
+		
+		
+		blank_instr = -1;
+		blank_len = 0;
+		cbl = blank_len;
+		for i = sn:(ni+1)
+			% Find the first loop that has at least 20 ms.
+			if(out.prog.instrs(i, 2) == LOOP)
+				for j = i:(ni+1)
+					total_length = 0.0;
+					
+					cur_len = out.prog.instrs(j, 5);
+					unit = out.prog.instrs(j, 6);
+					
+					if(unit == 's')
+						cur_len = cur_len*1000;
+					elseif(unit == 'ms')
+						cur_len = cur_len*1;
+					elseif(unit == 'us')
+						cur_len = cur_len/1000;
+					elseif(unit == 'ns')
+						cur_len = cur_len*1e-6;
+					end
+					
+					total_length = total_length + cur_len*1000;
+					
+					if(out.prog.instrs(j,1) == 0 && cur_len > cbl && cur_len > 20)
+						cbl = cur_len;
+						blank_instr = j-2;
+					end
+					
+					if(out.prog.instrs(j, 2) == END_LOOP && out.prog.instrs(j,3 == i-2))
+						% We found the relevant instruction!
+						loop_start = i-2;
+						loop_end = j-2;
+					end
+				end
+			end
+		end
+		
 	end
 end
 
