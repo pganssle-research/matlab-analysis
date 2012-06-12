@@ -236,7 +236,7 @@ switch(type)
         prec = 'char';
         s = 1;
     case FS_CUSTOM
-        prec = 'char';
+        prec = 'uchar';
         s = 1;
     case FS_UCHAR
         prec = 'uchar';

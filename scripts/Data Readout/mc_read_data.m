@@ -205,6 +205,7 @@ if(isfield(s, loc))
 			
 			j = j+4;
 			
+			% Flags
 			out.prog.instrs{1, i} = deblank(char(s1(j:j+l-2)));
 			j = j+l;
 			
@@ -236,64 +237,12 @@ if(isfield(s, loc))
 		for i=1:out.prog.nUniqueInstrs
 			for k=1:nfields
 				out.prog.instrs{i+1, k} = typecast(s1(j:(j+sizes(k)-1)), types{k});
+					
 				j = j+sizes(k);
 			end
 			
 			out.prog.instrs{i+1, 5} = out.prog.instrs{i+1, 5}*10^(-double(out.prog.instrs{i+1, 6})*3);
 			out.prog.instrs{i+1, 6} = units{out.prog.instrs{i+1, 6}+1};
-		end
-	end
-	
-	out.prog.ps = parse_instructions(out.prog);
-	
-	spans = find_loop_locs(out.prog.ps);
-	
-	ni = out.prog.ps.ni;
-	
-	sn = find(out.prog.ps.instrs.scan == 1, 1, 'first');
-	
-	tlspans = spans;
-	a = zeros(size(spans, 1), 1);
-	for i = 1:size(spans, 1)
-		a(i) = logical(find(arrayfun(@(x, y)spans(i, 1) > x && spans(i, 1) < y, spans(:, 1), spans(:, 2))));
-	end
-	
-	tlspans(a) = [];
-	
-	if(sn > 0 && ~isempty(tlspans))	
-		instrs = out.prog.ps.instrs;
-		e_t = 0; % Elapsed time so far;
-		for i = 1:size(tlspans, 1)
-			r_loop = 0;
-			c_l = 0;
-			
-			for j = tlspans(i, 1):tlspans(i, 2)
-				if(instrs.flags(j) == 0 && instrs.ts(j) > 20e-3)
-					% Loop located.
-					r_loop = 1;
-					c_l = instrs.ts;
-				end
-			end
-			
-			if(r_loop)
-				l_l = instrs.data(tlspans(i, 1));
-				t_t = calc_span_len(instrs, tlspans(i)); % Get loop length.
-				
-				c_t = t_t/l_l; % Get per-loop length.
-				
-				c_t = c_t * 1000; % In ms;
-				c_l = (c_l*1000)-20; % 20ms of this will be useless.
-				frac = 0.8*(c_l/c_t); % Take 80% of remaining fraction.
-				asym = 0.9;
-			
-				e_t = calc_span_len(instrs, [sn, tlspans(i,1)-1]) + t_t;
-
-				if(e_t > out.prog.np/out.prog.sr)
-					break;
-				end
-			end
-			
-			
 		end
 	end
 end
@@ -338,7 +287,190 @@ if(isfield(s, loc))
 	end
 end
 
-out = add_fft(out, 2);
+if(isfield(out, 'prog') && isfield(out.prog, 'instrs'))
+	out.prog.ps = parse_instructions(out.prog);
+	
+	spans = find_loop_locs(out.prog.ps);
+	
+	ni = out.prog.ps.ni;
+	
+	sn = find(out.prog.ps.instrs.scan == 1, 1, 'first');
+	
+	tlspans = spans;
+	a = zeros(size(spans, 1), 1);
+	for i = 1:size(spans, 1)
+		a(i) = ~isempty(find(arrayfun(@(x, y)spans(i, 1) > x && spans(i, 1) < y, spans(:, 1), spans(:, 2)), 1));
+	end
+	
+	tlspans(logical(a), :) = [];
+	
+	if(sn > 0 && ~isempty(tlspans))
+		instrs = out.prog.ps.instrs;
+		ins = 0;
+		
+		for i = 1:size(tlspans, 1)
+			for j = tlspans(i, 1):tlspans(i, 2)
+				if(instrs.flags(j) == 0 && instrs.ts(j) > 20e-3)
+					% Loop located.
+					r_loop = 1;
+					c_l = instrs.ts(j);
+					cins = j;
+					ins = i;
+					break;
+				end
+			end
+		end
+		
+		if(r_loop)
+			ad = zeros(out.prog.nDims, 1);
+			
+			if(out.prog.varied)
+				for j = 1:length(out.prog.vins)
+					if(~isempty(find(arrayfun(@(x, y) out.prog.vins(j) >= x && out.prog.vins(j) <= y, spans(:, 1), spans(:, 2)), 1)))
+						% Need to recapitulate along this dimenson.
+						ad(out.prog.vinsdim(j)) = 1;
+					end
+				end
+			end
+			
+			sd = size(out.mdata);
+			cc = num2cell(ones(size(sd)));
+			
+			ad2 = [0; 0; ad];
+			ad2 = logical(ad2);
+			
+			if(sum(ad) == 0)
+				ts = 1;
+				vinstrs = [];
+			else
+				ind = sd(ad2);
+								
+				ts = prod(ind);
+				vinstrs = out.prog.ps.vinstrs;	
+			end
+			
+			ad = logical(ad);
+			
+			l_l = zeros(ts, 1);
+			t_t = zeros(ts, 1);
+			c_t = zeros(ts, 1);
+			e_t = zeros(ts, 1);
+			
+			if(~isempty(find(cins == out.prog.vins, 1)))
+				clb = c_l;
+				c_l = zeros(ts, 1);
+				c_l(1) = clb;
+			else
+				c_l = ones(ts, 1)*c_l;
+			end
+			
+			for i = 1:ts
+				if(~isempty(vinstrs))
+					[cc{ad}] = ind2sub(ind, i);
+					instrs = out.prog.ps.vinstrs(cc{:});
+				end
+				
+				l_l(i) = instrs.data(tlspans(ins, 1));
+				t_t(i) = calc_span_length(instrs, tlspans(ins, :)); % Get loop length.
+				
+				if(c_l(i) ~= 0)
+					c_l(i) = instrs.ts(cins);
+				end
+				
+				c_t(i) = t_t(i)/l_l(i); % Get per-loop length.
+				e_t(i) = calc_span_length(instrs, [sn, tlspans(ins,1)-1]);
+			
+			end
+			
+			c_t = t_t./l_l;
+					
+			c_t = c_t * 1000; % In ms;
+			c_l = (c_l*1000)-20; % 20ms of this will be useless.				
+						
+			frac = 0.75*(c_l./c_t); % Take 75% of remaining fraction.
+			asym = 0.85;
+			
+			% Things to skip.
+			ns = 2;
+			ne = 5;
+			start = e_t*1000+c_t*ns;
+			num_win = floor((out.t(end)*1000 - start)./c_t - ne);
+
+			if(num_win > l_l - ne)
+				num_win = l_l - ne;
+			end
+			
+			ecb = 'out.mdata(:, :, ';
+		
+			cc = num2cell(ones(size(sd)));
+			
+			out.odata = out.mdata;
+			
+			for i = 1:ts
+				% Generate a command
+				[cc{ad2}] = ind2sub(ind, i);
+				inds = '';
+				for j = 1:length(ad)
+					if(~ad(j))
+						inds = [inds, ', :'];
+					else
+						inds = [inds, ', ', num2str(cc{j+2})];
+					end
+				end
+			
+				inds = inds(3:end);
+				
+				ec = [ecb, inds, ');'];
+				cdata = eval(ec);
+				
+				[points, out.win.spans{i}, ~, t_c] = get_subset(cdata, c_t(i), start(i), asym, frac(i), num_win(i), out.prog.sr);
+				points = mean(points, 1);
+				s2 = size(points);
+				points = reshape(points, s2(2:end));
+				out.win.it{i} = t_c;
+	
+				out.win.spans{i} = out.win.spans{i} - mean(out.win.spans{i});
+				
+				t_c = t_c/1000;
+			
+				if(out.disp.polyord >= 0 && out.disp.polyord < 99)
+					s2 = size(points);
+					% Get the fits
+					warning('off','all');
+					pfit = zeros(out.disp.polyord+1, size(cdata(:, :), 2));
+					ocdata = cdata;
+					
+					for j = 1:size(cdata(:, :), 2)
+						pfit(:, j) = polyfit(t_c, points(:, j), out.disp.polyord);
+						cdata(:, j) = ocdata(:, j)-polyval(pfit(:, j), out.t');
+					end
+					
+					out.win.polyfit{i} = reshape(pfit, [out.disp.polyord+1, s2(2:end)]);
+					ec = [ecb, inds, ') = cdata;'];
+					eval(ec);
+					
+					warning('on','all');
+				end
+				
+				c = zeros([num_win(i)-1, s2(2:end)]);
+				ct = zeros(num_win(i)-1, 1);
+				c(1:2:end, :) = points(1:2:(end-1), :) - points(2:2:end, :);
+				c(2:2:end, :) = points(3:2:end, :) - points(2:2:(end-1), :);
+				
+				ct(1:2:end) = (t_c(1:2:(end-1))+t_c(2:2:end));
+				ct(2:2:end) = (t_c(3:2:end)+t_c(2:2:(end-1)));
+				
+				ct = ct/2;
+				
+				out.win.c{i} = c;
+				out.win.ac{i} = mean(c, 2);
+				out.win.ct{i} = ct;
+			end
+		end
+	end
+end
+
+%out = add_fft(out, 2);
 
 function o = fs_type(type)
 % File types
@@ -446,7 +578,7 @@ for i = 2:(s.ni+1)
 	units = p.instrs{i, 6};
 	un = u.(units);
 	time = p.instrs{i, 5};
-	ts = time*un;
+	ts = time/un;
 	
 	instr = p.instrs{i, 2};
 	data = p.instrs{i, 3};
@@ -481,8 +613,8 @@ if(prog.varied)
 	for i = 1:nis
 		[cs{:}] = ind2sub(p.maxsteps, i);
 		for j = 1:nv
-			k = vil(i, j)+1;
-			l = p.vins(j);
+			k = vil(i, j)+2; % +1 for non-zero index, +1 for header.
+			l = p.vins(j)+1;
 			p.vInstrs(cs{:}).flags(l) = p.instrs{k, 1};
 			p.vInstrs(cs{:}).instr(l) = p.instrs{k, 2};
 			p.vInstrs(cs{:}).data(l) = p.instrs{k, 3};
@@ -494,14 +626,14 @@ if(prog.varied)
 			un = u.(units);
 			
 			p.vInstrs(cs{:}).un(l) = un;
-			p.vInstrs(cs{:}).ts(l) = time*un;
+			p.vInstrs(cs{:}).ts(l) = time/un;
 		end
 		
 		s.vinstrs = p.vInstrs;
 	end
 	
-	
 end
+
 
 function o = data_lims(instr, data)
 LOOP = 2;
@@ -524,19 +656,24 @@ END_LOOP = 3;
 LONG_DELAY = 7;
 is_loop = 0;
 
+len = 0;
+spans = [];
+
 if(instrs.instr(span(1)) == 2 && instrs.instr(span(2)) == 3 && instrs.data(span(2)) == span(1)-1)
 	spans = find_loop_locs(instrs, [span(1)+1, span(2)-1], 1);
 	l_dat = instrs.data(span(1));
 	is_loop = 1;
 end
 
-for i = 1:size(span, 1)
-	if(~isempty(spans) && logical(find(arrayfun(@(x, y)i >= x && i <= y, spans(:, 1), spans(:, 2)))))
+for i = span(1):span(2)
+	if(~isempty(spans) && ~isempty(find(arrayfun(@(x, y)i >= x && i <= y, spans(:, 1), spans(:, 2)), 1)))
 		continue;
 	end
 
 	if(instrs.instr(i) == LONG_DELAY)
-		len = len+ instrs.ts*instrs.data(i);
+		len = len + instrs.ts(i)*instrs.data(i);
+	else
+		len = len + instrs.ts(i);
 	end
 end
 
@@ -562,8 +699,14 @@ END_LOOP = 3;
 
 spans = [];
 
-instrs = instrs.instrs;
-i = span(1)
+i = span(1);
+
+ni = span(2);
+
+if(isfield(instrs, 'instrs'))
+	instrs = instrs.instrs;
+end
+
 while i <= span(2)
 	if(instrs.instr(i) == LOOP)
 		for j = (i+1):ni

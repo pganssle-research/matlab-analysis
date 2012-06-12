@@ -162,7 +162,3 @@ if(exist('span', 'var'))
     
     axis([xmin, xmax, ymin-padding, ymax+padding]);
 end
-
-
-
-

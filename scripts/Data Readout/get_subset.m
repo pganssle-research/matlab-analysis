@@ -1,4 +1,4 @@
-function [out, spans, subset] = get_subset(data, len, start, asym, frac, num_windows, sr)
+function [out, spans, subset, tc] = get_subset(data, len, start, asym, frac, num_windows, sr)
 % Gets a subset of the data, returns a variable "spans" indicating where
 % the subsets were taken from (scaled to the min/max of the data).
 %
@@ -16,7 +16,7 @@ function [out, spans, subset] = get_subset(data, len, start, asym, frac, num_win
 % num_windows = (all available)
 %
 % Usage:
-% [out, spans] = get_subset(data, len, start, asym, frac, num_windows, sr);
+% [out, spans, subset, tc] = get_subset(data, len, start, asym, frac, num_windows, sr);
 
 if(~exist('data', 'var') || (isstruct(data) && ~isfield(data, 'mdata') && ~isfield(data, 'adata')))
     error('Must supply data!');
@@ -82,10 +82,10 @@ end
 
 dlen = len*sr;
 if(dlen ~= round(dlen))
-   warning('Length is not an even multiple of the sampling rate - this could cause minor issues.'); 
+ %  warning('Length is not an even multiple of the sampling rate - this could cause minor issues.'); 
 end
 
-dlen = round(len*sr); % Round
+dlen = len*sr; 
 if(dlen <= 0)
     error('Length too short.');
 end
@@ -94,7 +94,7 @@ if(~exist('frac', 'var') || frac <= 0 || frac > 1)
     frac = 0.5; % Make it about half the length.
 end
 
-window = round(frac*dlen); % How many points in each window.
+window = ceil(frac*dlen); % How many points in each window.
 
 if(window == 0)
     error('Fraction of length too short.');
@@ -112,11 +112,10 @@ else
 end
 
 tlen = length(dat(1, :));
-
 spans = zeros(ds(1), 1);
 
 % Where to start within a window
-off = ceil((dlen-window)*asym);
+off = (dlen-window)*asym;
 if((off+window)>dlen)
     off = dlen-window;
 end
@@ -125,6 +124,11 @@ end
 indices_pos = cell2mat(arrayfun(@(x)(x*dlen+off+1):(x*dlen+off+window), 0:2:(num_windows-1), 'UniformOutput', false))' + start;
 indices_neg = cell2mat(arrayfun(@(x)(x*dlen+off+1):(x*dlen+off+window), 1:2:(num_windows-1), 'UniformOutput', false))' + start;
 indices = cell2mat(arrayfun(@(x)(x*dlen+off+1):(x*dlen+off+window), 0:1:(num_windows-1), 'UniformOutput', false))' + start;
+
+% Round at the end to reduce rounding errors.
+indices_pos = round(indices_pos);
+indices_neg = round(indices_neg);
+indices = round(indices);
 
 % Set the span outputs - scaled to the outputs
 % Now the actual output vector
@@ -141,7 +145,7 @@ spans(indices_neg) = Min-s;
 spans(indices_pos) = Max-s;
 
 subset = indices;
-
+tc = (indices(1:window:(end-1))+indices(window:window:end))/(2*sr);
 
 
 
