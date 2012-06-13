@@ -15,7 +15,11 @@ if(~exist('apod_lb', 'var'))
 end
 
 % Do the basic data processing.
-out = process_data(in, poly_order, cut, apod_lb);
+if(poly_order >= 0 || cut > 0 && apod_lb > 0)
+	out = process_data(in, poly_order, cut, apod_lb);
+else
+	out = in;
+end
 
 % Apply the fourier transform.
 sr = out.prog.sr;

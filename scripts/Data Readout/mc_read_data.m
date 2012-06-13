@@ -16,12 +16,6 @@ end
 MCD_DATAHEADER = '[Data Header]';
 MCD_DISPHEADER = '[Display Header]';
 MCD_DATAGROUP = '[DataGroup]';
-MCD_PROGHEADER = '[PulseProgram]';
-
-MCD_NDPC = 'NDPC';
-MCD_ANALOGOUT = 'AnalogOutput';
-MCD_PULSEPROPS= 'Properties';
-MCD_INSTRUCTIONS = 'Instructions';
 
 % Data header should come first - That'll be the main portion of the
 % structure - so those are top-level values.
@@ -41,29 +35,7 @@ MCD_TSTART = 'TimeStarted';
 MCD_TDONE = 'TimeDone';
 MCD_CIND = 'CurrentIndex';
 
-% Pulse program names
-MCD_STEPS = 'steps';
-MCD_MAXSTEPS = 'maxsteps';
-MCD_DATAEXPRS = 'dataexprs';
-MCD_DELAYEXPRS = 'delayexprs';
-MCD_VINS = 'vins';
-MCD_VINSDIM = 'vinsdim';
-MCD_VINSMODE = 'vinsmode';
-MCD_VINSLOCS = 'vinslocs';
-
-MCD_AOVARIED = 'aovaried';
-MCD_AODIM = 'aodim';
-MCD_AOVALS = 'aovals';
-
-CONTINUE = 0;
-STOP = 1;
-LOOP = 2;
-END_LOOP = 3;
-BRANCH = 6;
-LONG_DELAY = 7;
-WAIT = 8;
-
-out.FileName = [];
+out.Filename = [];
 out.ExperimentName = [];
 out.ExperimentNum = [];
 out.hash = [];
@@ -77,9 +49,9 @@ if(~isempty(sb))
 	fname = deblank(sb.data');
 	li = find(fname == '\', 1, 'last');
 	if(isempty(li) || li == length(fname))
-		out.FileName = fname;
+		out.Filename = fname;
 	else
-		out.FileName = fname((li+1):end);
+		out.Filename = fname((li+1):end);
 	end
 end
 
@@ -130,123 +102,8 @@ if(isfield(s, loc))
 	out.disp = eval(['s.' loc]);
 end
 
-% Pulse program
-% TODO: Generalize
-out.prog = [];
-[~, loc] = find_struct_by_name(f, MCD_PROGHEADER);
-if(isfield(s, loc))
-	out.prog = s.(loc).Properties;
-	
-	if(isfield(s.(loc), MCD_NDPC))
-		s1 = s.(loc).(MCD_NDPC);
-		if(isfield(s1, MCD_MAXSTEPS))
-			out.prog.maxsteps = s1.(MCD_MAXSTEPS);
-		end
-		
-		if(isfield(s1, MCD_STEPS))
-			out.prog.steps = s1.(MCD_STEPS);
-		end
-		
-		if(isfield(s1, MCD_VINS))
-			out.prog.vins = s1.(MCD_VINS);
-		end
-		
-		if(isfield(s1, MCD_VINSDIM))
-			out.prog.vinsdim = s1.(MCD_VINSDIM);
-		end
-		
-		if(isfield(s1, MCD_VINSMODE))
-			out.prog.vinsmode = s1.(MCD_VINSMODE);
-		end
-		
-		if(isfield(s1, MCD_VINSLOCS))
-			out.prog.vinslocs = s1.(MCD_VINSLOCS);
-		end
-		
-		if(isfield(s1, MCD_DELAYEXPRS))
-			out.prog.delayexprs = s1.(MCD_DELAYEXPRS);
-		end
-		
-		if(isfield(s1, MCD_DATAEXPRS))
-			out.prog.dataexprs = s1.(MCD_DATAEXPRS);
-		end
-		
-		
-	end
-	
-	if(isfield(s.(loc), MCD_ANALOGOUT))
-		s1 = s.(loc).(MCD_ANALOGOUT);
-		if(isfield(s1, MCD_AOVALS))
-			out.prog.aovals = s1.(MCD_AOVALS);
-		end
-		
-		if(isfield(s1, MCD_AOVARIED))
-			out.prog.aovaried = s1.(MCD_AOVARIED);
-			
-			if(out.prog.aovaried && isfield(s1, MCD_AODIM))
-				out.prog.aodim = s1.(MCD_AODIM);
-			end
-		end
-	end
-	
-	if(isfield(s.(loc), MCD_INSTRUCTIONS))
-		s1 = uint8((s.(loc).(MCD_INSTRUCTIONS))');
-		nfields = typecast(s1(1:4), 'int32');
-		out.prog.instrs = cell(out.prog.nUniqueInstrs+1, nfields);
-		sizes = zeros(nfields, 1);
-		types = cell(nfields, 1);
-		
-		j=5;
-		for i = 1:nfields
-			l = typecast(s1(j:j+3), 'int32'); % Get the length of the field name
-			if(l > 10000)
-				error('Memory overload.');
-			end
-			
-			j = j+4;
-			
-			% Flags
-			out.prog.instrs{1, i} = deblank(char(s1(j:j+l-2)));
-			j = j+l;
-			
-			if(strncmp(out.prog.instrs{1, i}, 'instr_data', length('instr_data')))
-				out.prog.instrs{1, i} = 'data';
-			end
-			
-			if(strncmp(out.prog.instrs{1, i}, 'trigger_scan', length('trigger_scan')))
-				out.prog.instrs{1, i} = 'scan';
-			end
-			
-			if(strncmp(out.prog.instrs{1, i}, 'instr_time', length('instr_time')))
-				out.prog.instrs{1, i} = 'time';
-			end
-			
-			if(strncmp(out.prog.instrs{1, i}, 'time_units', length('time_units')))
-				out.prog.instrs{1, i} = 'units';
-			end
-			
-			type = typecast(s1(j), 'uint8');
-			sizes(i) = fs_size(type);
-			types{i} = fs_type(type);
-			
-			j = j+1;
-		end
-		
-		
-		units = {'ns', 'us', 'ms', 's'};
-		for i=1:out.prog.nUniqueInstrs
-			for k=1:nfields
-				out.prog.instrs{i+1, k} = typecast(s1(j:(j+sizes(k)-1)), types{k});
-					
-				j = j+sizes(k);
-			end
-			
-			out.prog.instrs{i+1, 5} = out.prog.instrs{i+1, 5}*10^(-double(out.prog.instrs{i+1, 6})*3);
-			out.prog.instrs{i+1, 6} = units{out.prog.instrs{i+1, 6}+1};
-		end
-	end
-end
-
+% Read the program.
+out.prog = mc_read_prog(s);
 
 if(~isempty(out.prog))
 	np = out.prog.np;
@@ -287,9 +144,7 @@ if(isfield(s, loc))
 	end
 end
 
-if(isfield(out, 'prog') && isfield(out.prog, 'instrs'))
-	out.prog.ps = parse_instructions(out.prog);
-	
+if(isfield(out, 'prog') && isfield(out.prog, 'instrs'))	
 	spans = find_loop_locs(out.prog.ps);
 	
 	ni = out.prog.ps.ni;
@@ -325,8 +180,9 @@ if(isfield(out, 'prog') && isfield(out.prog, 'instrs'))
 			ad = zeros(out.prog.nDims, 1);
 			
 			if(out.prog.varied)
-				for j = 1:length(out.prog.vins)
-					if(~isempty(find(arrayfun(@(x, y) out.prog.vins(j) >= x && out.prog.vins(j) <= y, spans(:, 1), spans(:, 2)), 1)))
+				vins = out.prog.vins + 1;
+				for j = 1:length(vins)
+					if(~isempty(find(arrayfun(@(x, y) vins(j) >= x && vins(j) <= y, spans(:, 1), spans(:, 2)), 1)))
 						% Need to recapitulate along this dimenson.
 						ad(out.prog.vinsdim(j)) = 1;
 					end
@@ -342,12 +198,16 @@ if(isfield(out, 'prog') && isfield(out.prog, 'instrs'))
 			if(sum(ad) == 0)
 				ts = 1;
 				vinstrs = [];
+				ind = [];
 			else
 				ind = sd(ad2);
 								
 				ts = prod(ind);
 				vinstrs = out.prog.ps.vinstrs;	
 			end
+			
+			out.win.ad = ad2;
+			out.win.ind = ind;
 			
 			ad = logical(ad);
 			
@@ -356,7 +216,7 @@ if(isfield(out, 'prog') && isfield(out.prog, 'instrs'))
 			c_t = zeros(ts, 1);
 			e_t = zeros(ts, 1);
 			
-			if(~isempty(find(cins == out.prog.vins, 1)))
+			if(out.prog.varied && ~isempty(find(cins == out.prog.vins, 1)))
 				clb = c_l;
 				c_l = zeros(ts, 1);
 				c_l(1) = clb;
@@ -408,25 +268,35 @@ if(isfield(out, 'prog') && isfield(out.prog, 'instrs'))
 			
 			for i = 1:ts
 				% Generate a command
-				[cc{ad2}] = ind2sub(ind, i);
-				inds = '';
-				for j = 1:length(ad)
-					if(~ad(j))
-						inds = [inds, ', :'];
-					else
-						inds = [inds, ', ', num2str(cc{j+2})];
+				if(~isempty(ind))
+					[cc{ad2}] = ind2sub(ind, i);
+					inds = '';
+					for j = 1:length(ad)
+						if(~ad(j))
+							inds = [inds, ', :'];
+						else
+							inds = [inds, ', ', num2str(cc{j+2})];
+						end
 					end
+
+					inds = inds(3:end);
+
+					ec = [ecb, inds, ');'];
+					cdata = eval(ec);
+				else
+					cdata = out.mdata;
 				end
-			
-				inds = inds(3:end);
-				
-				ec = [ecb, inds, ');'];
-				cdata = eval(ec);
 				
 				[points, out.win.spans{i}, ~, t_c] = get_subset(cdata, c_t(i), start(i), asym, frac(i), num_win(i), out.prog.sr);
 				points = mean(points, 1);
 				s2 = size(points);
-				points = reshape(points, s2(2:end));
+				
+				if(~isvector(points))
+					points = reshape(points, s2(2:end));
+				else
+					points = points';		% For some reason the vectors come out as row vectors.
+				end
+				
 				out.win.it{i} = t_c;
 	
 				out.win.spans{i} = out.win.spans{i} - mean(out.win.spans{i});
@@ -443,12 +313,16 @@ if(isfield(out, 'prog') && isfield(out.prog, 'instrs'))
 					for j = 1:size(cdata(:, :), 2)
 						pfit(:, j) = polyfit(t_c, points(:, j), out.disp.polyord);
 						cdata(:, j) = ocdata(:, j)-polyval(pfit(:, j), out.t');
+						points(:, j) = points(:, j)-polyval(pfit(:, j), t_c);
 					end
 					
 					out.win.polyfit{i} = reshape(pfit, [out.disp.polyord+1, s2(2:end)]);
-					ec = [ecb, inds, ') = cdata;'];
-					eval(ec);
-					
+					if(~isempty(ind))
+						ec = [ecb, inds, ') = cdata;'];
+						eval(ec);
+					else
+						out.mdata = cdata;
+					end
 					warning('on','all');
 				end
 				
@@ -462,66 +336,28 @@ if(isfield(out, 'prog') && isfield(out.prog, 'instrs'))
 				
 				ct = ct/2;
 				
+				out.win.p{i} = points;
+				out.win.ap{i} = mean(points, 2);
 				out.win.c{i} = c;
 				out.win.ac{i} = mean(c, 2);
 				out.win.ct{i} = ct;
+			end
+			
+			if(~isempty(ind) && length(ind) > 1)
+				out.win.c = reshape(out.win.c, ind);	
+				out.win.ac = reshape(out.win.ac, ind);
+				out.win.ct = reshape(out.win.ct, ind);
+				out.win.it = reshape(out.win.it, ind);
+				out.win.ap = reshape(out.win.ap, ind);
+				out.win.p = reshape(out.win.p, ind);
+				out.win.polyfit = reshape(out.win.polyfit, ind);
+				out.win.spans = reshape(out.win.spans, ind);
 			end
 		end
 	end
 end
 
-%out = add_fft(out, 2);
-
-function o = fs_type(type)
-% File types
-FS_CHAR = 1;
-FS_UCHAR = 2;
-FS_INT = 3;
-FS_UINT = 4;
-FS_FLOAT = 5;
-FS_DOUBLE = 6;
-FS_INT64 = 7;
-FS_UINT64 = 8;
-
-if(type < 1 || type > 8 || type == FS_CHAR)
-	o = 'char';
-elseif(type == FS_UCHAR)
-	o = 'int8';
-elseif(type == FS_INT)
-	o = 'int32';
-elseif(type == FS_UINT)
-	o = 'uint32';
-elseif(type == FS_FLOAT)
-	o = 'float';
-elseif(type == FS_DOUBLE)
-	o = 'double';
-elseif(type == FS_INT64)
-	o = 'int64';
-elseif(type == FS_UINT64)
-	o = 'uint64';
-end
-
-function o = fs_size(type)
-% File types
-FS_CHAR = 1;
-FS_UCHAR = 2;
-FS_INT = 3;
-FS_UINT = 4;
-FS_FLOAT = 5;
-FS_DOUBLE = 6;
-FS_INT64 = 7;
-FS_UINT64 = 8;
-
-if(type < 1 || type > 8)
-	o = 1;
-elseif(type == FS_CHAR || type == FS_UCHAR)
-	o = 1;
-elseif(type == FS_INT || type == FS_UINT || type == FS_FLOAT)
-	o = 4;
-elseif(type == FS_DOUBLE || type == FS_INT64 || type == FS_UINT64)
-	o = 8;
-end
-
+out = add_fft(out);
 
 function [s, loc] = find_struct_by_name(in, name)
 % Find a struct from its .name parameter.
@@ -530,7 +366,7 @@ loc = [];
 flist = fieldnames(in);
 
 for i = 1:length(flist)
-	b = eval(['in.' flist{i} ';']);
+	b = in.(flist{i});
 	
 	if(isfield(b, 'name') && strcmp(b.name, name))
 		s = b;
@@ -546,184 +382,5 @@ for i = 1:length(flist)
 		end
 	end
 end
-
-function s = parse_instructions(prog)
-% Parse instructions into a meaningful structure.
-
-CONTINUE = 0;
-STOP = 1;
-LOOP = 2;
-END_LOOP = 3;
-JSR = 4;
-RTS = 5;
-BRANCH = 6;
-LONG_DELAY = 7;
-WAIT = 8;
-
-instrs = {'CONTINUE', 'STOP', 'LOOP', 'END_LOOP', 'JSR', 'RTS', 'BRANCH', 'LONG_DELAY', 'WAIT'};
-u = struct('s', 1, 'ms', 1000, 'us', 1e6, 'ns', 1e9);
-
-p = prog;
-
-s.ni = p.ninst;
-s.nUI = prog.nUniqueInstrs;
-nUI = s.nUI;
-
-ib = zeros(s.ni, 1);
-cb = {cell(s.ni, 1)};
-cprog = struct('ni', s.ni, 'tot_time', 0, 'flags', ib, 'instr', ib, 'data', ib, 'time', ib, 'units', cb, 'ts', ib, 'un', ib, 'instr_txt', cb);
-
-% Parse the first version of the program
-for i = 2:(s.ni+1)
-	units = p.instrs{i, 6};
-	un = u.(units);
-	time = p.instrs{i, 5};
-	ts = time/un;
-	
-	instr = p.instrs{i, 2};
-	data = p.instrs{i, 3};
-	
-	j = i-1;
-	
-	cprog.flags(j) = p.instrs{i, 1};
-	cprog.scan(j) = p.instrs{i, 4};
-	cprog.instr(j) = instr;
-	cprog.instr_txt{j} = instrs{instr+1};
-	cprog.data(j) = data;
-	cprog.time(j) = time;
-	cprog.units{j} = {units};
-	cprog.un(j) = un;
-	cprog.ts(j) = ts;
-end
-
-% spans = find_loop_locs(cprog);
-s.instrs = cprog;
-
-% Generate a set of pulse program instructions for each step in the
-% multi-dimensional space.
-if(prog.varied)
-	msteps = num2cell(p.maxsteps);
-	s.msteps = msteps;
-	p.vInstrs = repmat(cprog, msteps{:});
-	vil = reshape(p.vinslocs, p.maxnsteps, p.nVaried);
-	nv = p.nVaried;
-	nis = p.maxnsteps;
-	
-	cs = msteps;
-	for i = 1:nis
-		[cs{:}] = ind2sub(p.maxsteps, i);
-		for j = 1:nv
-			k = vil(i, j)+2; % +1 for non-zero index, +1 for header.
-			l = p.vins(j)+1;
-			p.vInstrs(cs{:}).flags(l) = p.instrs{k, 1};
-			p.vInstrs(cs{:}).instr(l) = p.instrs{k, 2};
-			p.vInstrs(cs{:}).data(l) = p.instrs{k, 3};
-			p.vInstrs(cs{:}).scan(l) = p.instrs{k, 4};
-			p.vInstrs(cs{:}).time(l) = p.instrs{k, 5};
-			p.vInstrs(cs{:}).units{l} = p.instrs{k, 6};
-			units = p.instrs{k, 6};
-			time = p.instrs{k, 5};
-			un = u.(units);
-			
-			p.vInstrs(cs{:}).un(l) = un;
-			p.vInstrs(cs{:}).ts(l) = time/un;
-		end
-		
-		s.vinstrs = p.vInstrs;
-	end
-	
-end
-
-
-function o = data_lims(instr, data)
-LOOP = 2;
-END_LOOP = 3;
-JSR = 4;
-RTS = 5;
-BRANCH = 6;
-LONG_DELAY = 7;
-
-o = 1;
-if((instr == LOOP || instr == LONG_DELAY) && data < 2)
-	o = 0;
-end
-
-o = logical(o);
-
-function len = calc_span_length(instrs, span)
-LOOP = 2;
-END_LOOP = 3;
-LONG_DELAY = 7;
-is_loop = 0;
-
-len = 0;
-spans = [];
-
-if(instrs.instr(span(1)) == 2 && instrs.instr(span(2)) == 3 && instrs.data(span(2)) == span(1)-1)
-	spans = find_loop_locs(instrs, [span(1)+1, span(2)-1], 1);
-	l_dat = instrs.data(span(1));
-	is_loop = 1;
-end
-
-for i = span(1):span(2)
-	if(~isempty(spans) && ~isempty(find(arrayfun(@(x, y)i >= x && i <= y, spans(:, 1), spans(:, 2)), 1)))
-		continue;
-	end
-
-	if(instrs.instr(i) == LONG_DELAY)
-		len = len + instrs.ts(i)*instrs.data(i);
-	else
-		len = len + instrs.ts(i);
-	end
-end
-
-for i = 1:size(spans, 1)
-	len = len + calc_span_length(instrs, spans(i, :));
-end
-
-if(is_loop)
-	len = len * l_dat;
-end
-
-function spans = find_loop_locs(instrs, span, top_level)
-if(~exist('top_level', 'var'))
-	top_level = 0;
-end
-
-if(~exist('span', 'var'))
-	span = [1, instrs.ni];
-end
-
-LOOP = 2;
-END_LOOP = 3;
-
-spans = [];
-
-i = span(1);
-
-ni = span(2);
-
-if(isfield(instrs, 'instrs'))
-	instrs = instrs.instrs;
-end
-
-while i <= span(2)
-	if(instrs.instr(i) == LOOP)
-		for j = (i+1):ni
-			if(instrs.instr(j) == END_LOOP && instrs.data(j) == i-1)
-				% Found it
-				spans = [spans; i, j]; %#ok
-				
-				if(top_level)
-					i = j;
-				end
-			end
-		end
-	end
-	
-	i = i+1;
-end
-
-
 
 

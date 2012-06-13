@@ -53,8 +53,6 @@ else
     dat = data;
 end
 
-dat = squeeze(dat);
-
 if(isempty(dat))
     error('Must supply data!');
 end
