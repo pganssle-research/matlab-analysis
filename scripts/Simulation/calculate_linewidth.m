@@ -43,7 +43,7 @@ end
 temp = temp + 273.2;
 
 % Rb-Rb cross section
-rn = (1/temp)*10^(21.866+4.312-4040/temp); % Rb density in cm^(-3)
+rn = (1/temp)*10^(21.866+4.312-4040/temp);  % Rb density in cm^(-3)
 rm = 1.41923e-25;                           % Rubidium mass in kg.
 
 kb = 1.38*1e-23;                            % Boltzmann constant, J/K

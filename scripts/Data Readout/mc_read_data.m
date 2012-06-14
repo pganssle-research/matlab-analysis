@@ -179,7 +179,7 @@ if(isfield(out, 'prog') && isfield(out.prog, 'instrs'))
 		if(r_loop)
 			ad = zeros(out.prog.nDims, 1);
 			
-			if(out.prog.varied)
+			if(out.prog.varied && isfield(out.prog, 'vins'))
 				vins = out.prog.vins + 1;
 				for j = 1:length(vins)
 					if(~isempty(find(arrayfun(@(x, y) vins(j) >= x && vins(j) <= y, spans(:, 1), spans(:, 2)), 1)))
@@ -216,7 +216,7 @@ if(isfield(out, 'prog') && isfield(out.prog, 'instrs'))
 			c_t = zeros(ts, 1);
 			e_t = zeros(ts, 1);
 			
-			if(out.prog.varied && ~isempty(find(cins == out.prog.vins, 1)))
+			if(isfield(out.prog, 'vins') && ~isempty(find(cins == out.prog.vins, 1)))
 				clb = c_l;
 				c_l = zeros(ts, 1);
 				c_l(1) = clb;
