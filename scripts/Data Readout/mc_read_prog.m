@@ -157,4 +157,54 @@ end
 
 if(isfield(prog, 'instrs'))
 	prog.ps = parse_instructions(prog);
+    p = prog;
+    
+    % If it's varied in indirect dimensions, read out the values.
+    if(prog.nDims && isfield(p, 'vinsdim'))
+        ps = prog.ps;
+        
+        % Cell array along each dimension for each thing, also creates a
+        % bool array determining if each dimension varies delay, data or
+        % both.
+            
+        dels = {};
+        datas = {};
+        
+        vtype = zeros(prog.nDims, 1);
+        
+        for d = 1:p.nDims
+            ins = p.vins(find(p.vinsdim == d));
+            vdata = zeros(p.maxsteps(d), length(ins));
+            vdel = vdata;
+            
+            cind = num2cell(ones(size(size(ps.vinstrs))));
+           
+            for i = 1:p.maxsteps(d)
+                cind{d} = i;
+                
+                for j = length(ins)
+                    k = ins(j);  
+                    vdata(i, j) = ps.vinstrs(cind{:}).data(k+1);
+                    vdel(i, j) = ps.vinstrs(cind{:}).ts(k+1);
+                end
+            end
+            
+            dels = [dels, {vdel}];
+            datas = [datas, {vdata}];
+            
+            for i = 1:length(ins)
+                if(~isempty(find(vdel(1, i) ~= vdel(:, i), 1, 'first')))
+                    vtype(d) = bitor(vtype(d), 1);
+                end
+                
+                if(~isempty(find(vdata(1, i) ~= vdata(:, i), 1, 'first')))
+                    vtype(d) = bitor(vtype(d), 2);
+                end
+            end
+        end
+        
+        prog.vtypes = vtype;
+        prog.vdel = dels;
+        prog.vdata = datas;      
+    end
 end

@@ -3,6 +3,8 @@ function Dw = calc_Dw_from_temp(temp)
     % Plug in the temperature and it will calculate the self-diffusion
     % constant of water. Temp is in Celcius
     %
+    % Answer is in cm^2/s.
+    %
     % Dw = calc_Dw_from_temp(temp)
     
     temp = temp+273.15;

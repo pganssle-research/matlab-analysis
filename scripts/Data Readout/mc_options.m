@@ -17,24 +17,24 @@ function o = mc_options(varargin)
 %				-2 - > Show the first one
 %
 % newfig:	Bool - > Whether or not to open in a new figure. (Default: 0)
-% name:		Str - > Name of the figure (Default: 'MC Data Viewer') 
-%
+% name:		Str - > Name of the figure (Default: 'MC Data Viewer')
+% mpulse:   Bool - > Whether or not to use multipulse
 %
 % Usage:
 % o = mc_options('param1', 'val1', ...);
 
-o = struct('fft', 0, 'c', 0, 'step', [-1], 'newfig', 0, 'name', 'MC Data Viewer');
+o = struct('fft', 0, 'c', 0, 'step', [-1], 'newfig', 0, 'name', 'MC Data Viewer', 'mpulse', 0);
 
 % Types:
 TYPE_NUM = 0;
 TYPE_BOOL = 1;
 TYPE_STR = 2;
 
-options = {'fft', 'c', 'step', 'newfig', 'name'};
-type = {TYPE_NUM, TYPE_NUM, TYPE_NUM, TYPE_BOOL, TYPE_STR};
+options = fieldnames(o);
+type = {TYPE_NUM, TYPE_NUM, TYPE_NUM, TYPE_BOOL, TYPE_STR, TYPE_BOOL};
 
-maxes = {3, 3, [], [], []};
-mins = {0, 0, -2, [], []};
+maxes = {3, 3, [], [], [], []};
+mins = {0, 0, -2, [], [], []};
 
 n = floor(length(varargin)/2);
 
