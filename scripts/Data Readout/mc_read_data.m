@@ -251,7 +251,7 @@ if(isfield(out, 'prog') && isfield(out.prog, 'instrs'))
 			asym = 0.85;
 			
 			% Things to skip.
-			ns = 2;
+			ns = 1;
 			ne = 5;
 			start = e_t*1000+c_t*ns;
 			num_win = floor((out.t(end)*1000 - start)./c_t - ne);

@@ -8,6 +8,17 @@ function [t1, t1_std, t1s] = find_t1_lsq(curves, indir_times, num_measurements, 
 
 % Extract the defaults
 s = size(curves);
+st = size(indir_times);
+
+if(st(2) > st(1))
+	indir_times = indir_times';
+	if(find(st(2) == s) == 2)
+		curves = curves';
+		
+		s = size(curves);
+	end
+end
+
 if nargin < 3 || num_measurements == 0
     num_measurements = s(2);
 end
@@ -32,7 +43,11 @@ end
 
 % Get the t1 for each measurement.
 fit = zeros(num_measurements, 3);
-o = optimset('Display', 'off');
+
+typical_values = [2, curves(1)];
+options = optimset('Algorithm', 'levenberg-marquardt', 'Display', 'off', ...
+	'Typical', typical_values, 'MaxFunEvals', 2000);
+
 for i = 1:num_measurements
     v = curves(:, i);
     v = v(start_index:end_index);
@@ -41,7 +56,7 @@ for i = 1:num_measurements
     
     % Get the results, save only the exitflag which gives convergence.
     warning('off'); %#ok;
-    [x, ~, ~, exitflag] = lsqcurvefit(@exponential_fit, [4, 0.4], indir_times, v, [], [], o);
+    [x, ~, ~, exitflag] = lsqcurvefit(@exponential_fit, typical_values, indir_times, v, [], [], options);
     warning('on'); %#ok
     fit(i, 1:2) = x(1:2);
     fit(i, 3) = exitflag;

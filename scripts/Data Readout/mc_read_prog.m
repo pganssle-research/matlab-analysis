@@ -173,7 +173,7 @@ if(isfield(prog, 'instrs'))
         vtype = zeros(prog.nDims, 1);
         
         for d = 1:p.nDims
-            ins = p.vins(find(p.vinsdim == d));
+            ins = p.vins(p.vinsdim == d);
             vdata = zeros(p.maxsteps(d), length(ins));
             vdel = vdata;
             
@@ -182,7 +182,7 @@ if(isfield(prog, 'instrs'))
             for i = 1:p.maxsteps(d)
                 cind{d} = i;
                 
-                for j = length(ins)
+                for j = 1:length(ins)
                     k = ins(j);  
                     vdata(i, j) = ps.vinstrs(cind{:}).data(k+1);
                     vdel(i, j) = ps.vinstrs(cind{:}).ts(k+1);
