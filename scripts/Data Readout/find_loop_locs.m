@@ -30,12 +30,16 @@ if(~isfield(instrs, 'flags'))
 	end
 end
 
-if(~exist('span', 'var') || isscalar(span) || isempty(span))
+if(~exist('span', 'var') || isempty(span))
 	if(isfield(instrs, 'ni'))
 		span = [1, instrs.ni];
 	else
 		span = length(instrs.flags);
 	end
+end
+
+if(isscalar(span))
+	span = [span, instrs.ni];
 end
 
 if(~exist('top_lev', 'var'))

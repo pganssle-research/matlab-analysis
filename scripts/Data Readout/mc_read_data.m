@@ -102,6 +102,8 @@ if(isfield(s, loc))
 	out.disp = eval(['s.' loc]);
 end
 
+out.disp.mag_cal = 836.52;
+
 % Read the program.
 out.prog = mc_read_prog(s);
 
@@ -251,8 +253,8 @@ if(isfield(out, 'prog') && isfield(out.prog, 'instrs'))
 			asym = 0.85;
 			
 			% Things to skip.
-			ns = 1;
-			ne = 5;
+			ns = 2;
+			ne = 1;
 			start = e_t*1000+c_t*ns;
 			num_win = floor((out.t(end)*1000 - start)./c_t - ne);
 

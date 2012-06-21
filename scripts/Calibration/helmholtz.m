@@ -2,7 +2,7 @@ function field = helmholtz(x, I, n, R)
    % Calculates the field as a function of distance from the origin in an
    % helmholtz coil.
    %
-   %  Defaults are I = 1A, n = 8 turns, R = 37.465mm (1.475")
+   %  Defaults are I = 1A, n = 8 turns, R = 36.5125mm (1.4375")
    %  Units of output are Gauss.
    %
    %  field = helmholtz(x, I, n, R);
@@ -18,7 +18,7 @@ function field = helmholtz(x, I, n, R)
    end
     
    if(nargin < 4)
-       R = 37.465;   % In mm - 1" is default
+       R = 36.5125;   % In mm - 1" is default
    end
     
    field = (n*m0*I*(R^2)/2)*((R^2 + ((R/2) + x).^2).^(-3/2) + (R^2 + ((R/2) - x).^2).^(-3/2));

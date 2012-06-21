@@ -30,14 +30,18 @@ if(~exist('anti', 'var'))
     anti = 0;
 end
 
+if(~exist('metric', 'var'))
+	metric = 0;
+end
+
 % Make the curves
-c = struct('r', r, 'h', h, 'start_angle', 0, 'arc_length', 2*pi, 'nt', 8, 'direction', 1);
+c = struct('r', r, 'h', h/2, 'start_angle', 0, 'arc_length', 2*pi, 'nt', 8, 'direction', 0);
 
 c = repmat(c, 1, 2);
 
-c(2).h = -h;
+c(2).h = -c(2).h;
 if(anti)
-    c(2).direction = 0;
+    c(2).direction = 1;
 end
 
 B = simulate_any_coil(c, [], mesh, metric, current, 0);
@@ -68,50 +72,3 @@ minutes = floor((total_time)/60);
 total_time = total_time-minutes*60;
 seconds = total_time;
 fprintf('Elapsed time: %02d:%02d:%06.3f\n', hours, minutes, seconds);
-
-
-function cur = curve_xy(x0, y0, x, y, z1)
-    z = repmat(z, size(x));
-    
-    cur = zeros(length(x), 3);
-    
-    x1 = x-x0;
-    y1 = y-y0;
-    
-    d = ((x-x0).^2 + (y-y0).^2 + (z-z0).^2);
-    d = repmat(d, 3, 1);
-    
-    cur(:, 1) = z1;
-    cur(:, 2) = -z1;
-    cur(:, 3) = y1*x1;
-  
-    cur = cur./d;
-
-function cur = curve_theta(x0, y0, z0, R, thet, z)
-ct = cos(thet);
-st = sin(thet);
-
-x = R*ct - x0;
-y = R*st - y0;
-z = z-z0;
-z = repmat(z, size(thet));
-
-cur = zeros(length(thet), 3);
-
-d = (x.^2 + y.^2 + z.^2).^(3/2);
-
-repmat(d, 3, 1);
-
-cur(:, 1) = z.*ct;
-cur(:, 2) = z.*st;
-cur(:, 3) = x.*ct - y.*st;
-
-cur = R*cur./d;
-
-function lin = lin_int(x1, y1, z0, z)
-
-d = (x1^2 + y1^2 + (z-z0).^2).^(-3/2);
-
-lin = repmat(d, 1, 2);
-lin(:, 1) = -lin(:, 1)*y1; % x
-lin(:, 2) = lin(:, 2)*x1; % y

@@ -1,4 +1,4 @@
-function D = find_D_lsq(struct, n, tau, G_cal, navg, temp)
+function [D, out, c2, V] = find_D_lsq(struct, n, tau, G_cal, navg, temp, mag_cal)
 % Feed this an mc_struct, it will calculate the diffusion coefficient from
 % a least squares fit.
 %
@@ -12,16 +12,30 @@ function D = find_D_lsq(struct, n, tau, G_cal, navg, temp)
 % Usage:
 % D = find_D_lsq(struct, G_cal, navg, temp)
 
-if(~exist('G_cal', 'var'))
-	G_cal = 0.0512;		% Gradient calibration in G/(V*cm)
+s = struct;
+
+if(~exist('G_cal', 'var') || isempty(G_cal) || ~isscalar(G_cal) || G_cal <= 0)
+	if(isfield(struct, 'disp') && isfield(struct.disp, 'G_cal'))
+		G_cal = s.disp.G_cal;
+	else
+		G_cal = 0.0498;		% Gradient calibration in G/(V*cm)
+	end
 end
 
 if(~exist('navg', 'var'))
-	navg = 3;				% Number of windows for the make_avg_any
+	navg = 6;				% Number of windows for the make_avg_any
 end
 
 if(~exist('temp', 'var'))
 	temp = 40;
+end
+
+if(~exist('mag_cal', 'var') || isempty(mag_cal) || mag_cal <= 0)
+	if(isfield(s, 'disp') && isfield(s.disp, 'mag_cal'))
+		mag_cal = s.disp.mag_cal;
+	else
+		mag_cal = 836.52;
+	end
 end
 
 if(~exist('n', 'var') || n <= 0)
@@ -31,7 +45,7 @@ if(~exist('n', 'var') || n <= 0)
 		n = struct.prog.ps.instrs.data(i1);
 	else
 		error('Invalid number of cycles!');
-	end	
+	end
 end
 
 if(~exist('tau', 'var') || tau <= 0)
@@ -43,8 +57,12 @@ if(~exist('tau', 'var') || tau <= 0)
 	end
 end
 
+out = s;
+s.disp.mag_cal = mag_cal;
+s.disp.G_cal = G_cal;
+
 V = G_cal*struct.prog.aovals';
-c2 = squeeze(make_avg_any(struct.win.ac{:}, navg));
+c2 = mag_cal*squeeze(make_avg_any(struct.win.ac{:}, navg));
 
 if(c2(1) < 0)
 	c2 = -c2;
@@ -61,3 +79,12 @@ D = lsqcurvefit(@(x, t)diffusion_fit(x, t, n, tau), typical_values, V, c2, [], [
 
 warning('on'); %#ok
 
+out.fit.V = V;
+out.fit.c = c2;
+out.fit.cf = diffusion_fit(D, V, n, tau);
+out.fit.D = D(1);
+out.fit.DA = D(2);
+out.fit.n = n;
+out.fit.tau = tau;
+
+D = D(1);

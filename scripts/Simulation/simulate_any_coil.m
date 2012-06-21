@@ -40,9 +40,9 @@ if(exist(histpath, 'file'))
         && exist('hltime', 'var') && exist('hln', 'var') ...
         && exist('hctime', 'var') && exist('hcn', 'var'))
                       
-        polb = polyfit(hbn, hbtime, 1);
-        poll = polyfit(hln, hltime, 1);
-        polc = polyfit(hcn, hctime, 1);
+        polb = polyfit(hbn, hbtime, 1); %#ok
+        poll = polyfit(hln, hltime, 1); %#ok
+        polc = polyfit(hcn, hctime, 1); %#ok
         
         total_time = polyval(poll, num_lines*size(mesh, 1)) + polyval(polc, num_curves*size(mesh, 1)) + polyval(polb, size(mesh, 1));
     end
@@ -68,7 +68,7 @@ end
 start_time = cputime;
 
 if(~exist('metric', 'var') || metric ~= 1)
-    mesh = mesh * 0.0254;
+    mesh = mesh * 25.4;
     
     metric = 0;
 end  
@@ -96,8 +96,8 @@ for i = 1:length(lines)
     end
     
     if(~metric)
-        lines(i).l = l.l*0.0254;
-        lines(i).start = l.start*0.254;
+        lines(i).l = l.l* 25.4;
+        lines(i).start = l.start*25.4;
     end
 end
 
@@ -137,8 +137,8 @@ for i = 1:length(curves)
     end
     
     if(~metric)
-        curves(i).r = c.r*0.0254;
-        curves(i).h = c.h*0.0254;
+        curves(i).r = c.r * 25.4;
+        curves(i).h = c.h * 25.4;
     end
 end
 
@@ -147,7 +147,7 @@ B = zeros(size(mesh));
 ctime = cputime;
 for i = 1:length(curves)
     c = curves(i);
-    
+	 
     if(c.direction)
         start_angle = c.start_angle;
         end_angle = c.start_angle+c.arc_length;
@@ -170,6 +170,7 @@ mag_buff = zeros(size(mesh));
 % Now we'll do the line parts.
 ltime = cputime;
 for i = 1:length(lines)
+	l = lines(i);
     if(l.direction)
        top = l.start(3);
        bot = l.start(3)-l.l;
@@ -185,8 +186,8 @@ for i = 1:length(lines)
 end
 ltime = cputime - ltime;
 
-mu = 1e-3; % Vacuum permeability in meters * Gauss / A.
-B = B*mu;
+mu = 1; % Vacuum permeability in mm * Gauss / A.
+B = B*mu*current;
 
 total_time = cputime-start_time;
 btime = total_time-(ltime+ctime);
@@ -205,19 +206,19 @@ if(verbose && exist('hbtime', 'var') && exist('hbn', 'var') ...
     hcn = [num_curves*size(mesh, 1) hcn];
     
     if(length(hbtime) > truncate_at)
-        hbtime = hbtime(1:truncate_at);
+        hbtime = hbtime(1:truncate_at); %#ok
     end
     
     if(length(hbn) > truncate_at)
-        hbn = hbn(1:truncate_at);
+        hbn = hbn(1:truncate_at); %#ok
     end
     
     if(length(hctime) > truncate_at)
-        hctime = hctime(1:truncate_at);
+        hctime = hctime(1:truncate_at); %#ok
     end
     
     if(length(hcn) > truncate_at)
-        hcn = hcn(1:truncate_at);
+        hcn = hcn(1:truncate_at); %#ok
     end
     
     if(length(hltime) > truncate_at)
@@ -270,22 +271,18 @@ function cur = curve_theta(x0, y0, z0, R, thet, z)
 ct = cos(thet);
 st = sin(thet);
 
-x = R*ct - x0;
-y = R*st - y0;
+x = R*ct-x0;
+y = R*st-y0;
 z = z-z0;
 z = repmat(z, size(thet));
 
-cur = zeros(length(thet), 3);
+d = (x.^2 + y.^2 + z.^2).^(-3/2);
 
-d = (x.^2 + y.^2 + z.^2).^(3/2);
+cur = R*repmat(d, length(thet), 3);
 
-repmat(d, 3, 1);
-
-cur(:, 1) = z.*ct;
-cur(:, 2) = z.*st;
-cur(:, 3) = x.*ct - y.*st;
-
-cur = R*cur./d;
+cur(:, 1) = cur(:, 1).*(z.*ct);
+cur(:, 2) = cur(:, 2).*(z.*st);
+cur(:, 3) = -cur(:, 3).*(x.*ct + y.*st);
 
 function lin = lin_int(x1, y1, z0, z)
 

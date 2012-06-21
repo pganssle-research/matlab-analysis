@@ -177,17 +177,13 @@ y = R*st - y0;
 z = z-z0;
 z = repmat(z, size(thet));
 
-cur = zeros(length(thet), 3);
+d = (x.^2 + y.^2 + z.^2).^(-3/2);
 
-d = (x.^2 + y.^2 + z.^2).^(3/2);
+cur = R*repmat(d, length(thet), 3);
 
-repmat(d, 3, 1);
-
-cur(:, 1) = z.*ct;
-cur(:, 2) = z.*st;
-cur(:, 3) = x.*ct - y.*st;
-
-cur = R*cur./d;
+cur(:, 1) = cur(:, 1).*z.*ct;
+cur(:, 2) = cur(:, 2).*z.*st;
+cur(:, 3) = -cur(:, 3).*(x.*ct + y.*st);
 
 function lin = lin_int(x1, y1, z0, z)
 
