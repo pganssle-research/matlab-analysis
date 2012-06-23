@@ -1,4 +1,4 @@
-function [D, out, c2, V] = find_D_lsq(struct, n, tau, G_cal, navg, temp, mag_cal)
+function [D, out, De, c2, V] = find_D_lsq(struct, n, tau, G_cal, navg, temp, mag_cal)
 % Feed this an mc_struct, it will calculate the diffusion coefficient from
 % a least squares fit.
 %
@@ -62,7 +62,12 @@ s.disp.mag_cal = mag_cal;
 s.disp.G_cal = G_cal;
 
 V = G_cal*struct.prog.aovals';
-c2 = mag_cal*squeeze(make_avg_any(struct.win.ac{:}, navg));
+
+if(isfield(out, 'fit') && isfield(out.fit, 'c'))
+	c2 = out.fit.c;
+else
+	c2 = mag_cal*squeeze(make_avg_any(struct.win.ac{:}, navg));
+end
 
 if(c2(1) < 0)
 	c2 = -c2;
@@ -75,7 +80,11 @@ options = optimset('Algorithm', 'levenberg-marquardt', 'Display', 'off', ...
 
 warning('off'); %#ok
 
-D = lsqcurvefit(@(x, t)diffusion_fit(x, t, n, tau), typical_values, V, c2, [], [], options);
+[D, ~, r, ~, ~, ~, J] = lsqcurvefit(@(x, t)diffusion_fit(x, t, n, tau), typical_values, V, c2, [], [], options);
+
+ci = nlparci(D, r, 'jacobian', J);
+
+De = ci(:, 2)'-D;
 
 warning('on'); %#ok
 
@@ -84,7 +93,10 @@ out.fit.c = c2;
 out.fit.cf = diffusion_fit(D, V, n, tau);
 out.fit.D = D(1);
 out.fit.DA = D(2);
+out.fit.De = De(1);
+out.fit.DAe = De(2);
 out.fit.n = n;
 out.fit.tau = tau;
 
 D = D(1);
+De = De(1);

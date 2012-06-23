@@ -57,15 +57,23 @@ out.fit.cf = zeros(size(c));
 out.fit.t1 = zeros(1, ns);
 out.fit.t1A = zeros(1, ns);
 
+out.fit.t1e = zeros(1, ns);
+out.fit.t1Ae = zeros(1, ns);
 
 warning('off'); %#ok;
 
 for i = 1:ns
-	t1 = lsqcurvefit(@exponential_fit, typical_values, t, c(:, i)', [], [], options);
+	[tau, ~, r, ~, ~, ~, J]  = lsqcurvefit(@exponential_fit, typical_values, t, c(:, i)', [], [], options);
 	
+		
 	out.fit.t1(i) = t1(1);
 	out.fit.t1A(i) = t1(2);
 	out.fit.cf(:, i) = exponential_fit(t1, t);
+
+	% Standard error (95% confidence interval)
+	ci = nlparci(t1, r, 'jacobian', J);
+	out.fit.t1e(i) = ci(1, 2)-t1(1);
+	out.fit.t1Ae(i) = ci(2, 2)-t1(2);
 end
 
 t1 = out.fit.t1;

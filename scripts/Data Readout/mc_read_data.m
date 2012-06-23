@@ -1,7 +1,11 @@
-function [out, path] = mc_read_data(path)
+function [out, path] = mc_read_data(path, ns)
 
-if(~exist('path', 'var'))
+if(~exist('path', 'var') || isempty(path) || ~ischar(path))
 	path = -1;
+end
+
+if(~exist('ns', 'var'))
+	ns = 1;
 end
 
 % Get the raw structure
@@ -253,7 +257,6 @@ if(isfield(out, 'prog') && isfield(out.prog, 'instrs'))
 			asym = 0.85;
 			
 			% Things to skip.
-			ns = 2;
 			ne = 1;
 			start = e_t*1000+c_t*ns;
 			num_win = floor((out.t(end)*1000 - start)./c_t - ne);

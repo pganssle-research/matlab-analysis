@@ -56,7 +56,7 @@ for i = 1:num_measurements
     
     % Get the results, save only the exitflag which gives convergence.
     warning('off'); %#ok;
-    [x, ~, ~, exitflag] = lsqcurvefit(@exponential_fit, typical_values, indir_times, v, [], [], options);
+    [t1, ~, r, ~, ~, ~, J] = lsqcurvefit(@exponential_fit, typical_values, indir_times, v, [], [], options);
     warning('on'); %#ok
     fit(i, 1:2) = x(1:2);
     fit(i, 3) = exitflag;
