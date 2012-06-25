@@ -135,15 +135,15 @@ out.disp.mag_cal = mag_cal;
 
 % Get the t1 for each measurement.
 perm = 1:p.nDims;
-perm(p.vinsdim(ins)) = [];
-perm = [p.vinsdim(ins), perm(:)];
+perm(ins) = [];
+perm = [ins, perm(:)];
 
 ns = prod(p.maxsteps(perm(2:end)));
 
 if(length(perm) > 1)
 	c = permute(c, perm); % Put the varying dimension at the front.
 else
-	if(size(c, 1) < size(c, 2))
+	if(size(c, 1) > size(c, 2))
 		c = c';
 	end
 end
@@ -155,7 +155,11 @@ options = optimset('Algorithm', 'levenberg-marquardt', 'Display', 'off', ...
 if(is_diff)
 	out.fit.V = V;
 else
-	out.fit.t = t;
+    if(size(t, 2) > size(t, 1))
+        t = t';
+    end
+    
+    out.fit.t = t;
 end
 
 out.fit.c = c;
@@ -179,9 +183,9 @@ if(is_t1 || is_t2)
 		for i = 1:ns
 			[tau, ~, r, ~, ~, ~, J]  = lsqcurvefit(@exponential_fit, typical_values, t, c(:, i), [], [], options);
 
-			out.fit.tau(:, i) = tau(1);
-			out.fit.tauA(:, i) = tau(2);
-			out.fit.cf(:, i) = exponential_fit(tau, t);
+			out.fit.tau(i, :) = tau(1);
+			out.fit.tauA(i, :) = tau(2);
+			out.fit.cf(:, i) = exponential_fit(tau, t');
 
 			% Standard error (95% confidence interval)
 			ci = nlparci(tau, r, 'jacobian', J);
