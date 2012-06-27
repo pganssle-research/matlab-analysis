@@ -106,7 +106,7 @@ if(isfield(s, loc))
 	out.disp = eval(['s.' loc]);
 end
 
-out.disp.mag_cal = 836.52;
+out.disp.mag_cal = 777.82;
 
 % Read the program.
 out.prog = mc_read_prog(s);
@@ -362,6 +362,15 @@ if(isfield(out, 'prog') && isfield(out.prog, 'instrs'))
 	end
 end
 
+if(~isfield(out, 'win'))
+	ord = 2;
+	
+	if(isfield(out, 'disp') && isfield(out.disp, 'polyord'))
+		ord = out.disp.polyord;
+	end
+	
+	out = process_data(out, ord);
+end
 out = add_fft(out);
 
 function [s, loc] = find_struct_by_name(in, name)

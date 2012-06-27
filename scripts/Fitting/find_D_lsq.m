@@ -79,13 +79,19 @@ options = optimset('Algorithm', 'levenberg-marquardt', 'Display', 'off', ...
 	'Typical', typical_values, 'MaxFunEvals', 2000);
 
 warning('off'); %#ok
+for i = 1:1
+	[D, ~, r, ~, ~, ~, J] = lsqcurvefit(@(x, t)diffusion_fit(x, t, n, tau), typical_values, V, c2(i, :), [], [], options);
 
-[D, ~, r, ~, ~, ~, J] = lsqcurvefit(@(x, t)diffusion_fit(x, t, n, tau), typical_values, V, c2, [], [], options);
+	ci = nlparci(D, r, 'jacobian', J);
 
-ci = nlparci(D, r, 'jacobian', J);
-
-De = ci(:, 2)'-D;
-
+	De = ci(:, 2)'-D;
+	
+	out.fit.D(i) = D(1);
+	out.fit.DA(i) = D(2);
+	
+	out.fit.De(i) = De(1);
+	out.fit.DeA(i) = De(2);
+end
 warning('on'); %#ok
 
 out.fit.V = V;

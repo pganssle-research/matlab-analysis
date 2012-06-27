@@ -54,12 +54,14 @@ end
 if(~exist('fft', 'var') || ~fft)        
     data = struct.mdata;
     x = struct.t;
+	 xlab = 'Time (s)';
 else
     if(~isfield(struct, 'fft'))
         struct = add_fft(struct);
     end
     
     x = struct.f; 
+	 xlab = 'Frequency (Hz)';
     
     data = struct.fft;
     
@@ -131,7 +133,16 @@ if(~fft && exist('spans', 'var'))
    end
 end
 
+ylab = 'Signal (V)';
+if(isfield(struct, 'disp') && isfield(struct.disp, 'mag_cal'))
+	data = data*struct.disp.mag_cal;
+	ylab = 'Magnetic field (pT)';
+end
+
 plot(x, data(:, :));
+
+xlabel(xlab);
+ylabel(ylab);
 
 if(isfield(struct, 'FileName'))
    title(struct.FileName); 
