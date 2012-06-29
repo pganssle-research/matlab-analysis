@@ -13,9 +13,3 @@
 /ReadTDMExperimentHistory.mat
 /Simulations
 /Toolboxes
-/scripts/Laplace2D
-/scripts/Laplace2D/processData.m
-/scripts/Laplace2D/processData2.m
-/scripts/Laplace2D/exp_decay.m
-/scripts/Laplace2D/make_data_struct.m
-/scripts/Laplace2D/naive_fit.m
