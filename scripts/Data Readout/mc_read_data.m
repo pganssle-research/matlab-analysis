@@ -106,8 +106,6 @@ if(isfield(s, loc))
 	out.disp = eval(['s.' loc]);
 end
 
-out.disp.mag_cal = 777.82;
-
 % Read the program.
 out.prog = mc_read_prog(s);
 
@@ -151,19 +149,11 @@ if(isfield(s, loc))
 end
 
 if(isfield(out, 'prog') && isfield(out.prog, 'instrs'))	
-	spans = find_loop_locs(out.prog.ps);
-	
-	ni = out.prog.ps.ni;
+	% Find all the loop locations which it could be (starting with the
+	% instruction which triggers the scan.
 	
 	sn = find(out.prog.ps.instrs.scan == 1, 1, 'first');
-	
-	tlspans = spans;
-	a = zeros(size(spans, 1), 1);
-	for i = 1:size(spans, 1)
-		a(i) = ~isempty(find(arrayfun(@(x, y)spans(i, 1) > x && spans(i, 1) < y, spans(:, 1), spans(:, 2)), 1));
-	end
-	
-	tlspans(logical(a), :) = [];
+	tlspans = find_loop_locs(out.prog.ps, sn, 1); 
 	
 	if(sn > 0 && ~isempty(tlspans))
 		instrs = out.prog.ps.instrs;
@@ -187,12 +177,7 @@ if(isfield(out, 'prog') && isfield(out.prog, 'instrs'))
 			
 			if(out.prog.varied && isfield(out.prog, 'vins'))
 				vins = out.prog.vins + 1;
-				for j = 1:length(vins)
-					if(~isempty(find(arrayfun(@(x, y) vins(j) >= x && vins(j) <= y, spans(:, 1), spans(:, 2)), 1)))
-						% Need to recapitulate along this dimenson.
-						ad(out.prog.vinsdim(j)) = 1;
-					end
-				end
+				ad = arrayfun(@(j)j > sn && j < tlspans(ins,2 ), vins);
 			end
 			
 			sd = size(out.mdata);
@@ -308,20 +293,20 @@ if(isfield(out, 'prog') && isfield(out.prog, 'instrs'))
 				
 				t_c = t_c/1000;
 			
-				if(out.disp.polyord >= 0 && out.disp.polyord < 99)
+				if(out.disp.poly_ord >= 0 && out.disp.poly_ord < 99)
 					s2 = size(points);
 					% Get the fits
 					warning('off','all');
-					pfit = zeros(out.disp.polyord+1, size(cdata(:, :), 2));
+					pfit = zeros(out.disp.poly_ord+1, size(cdata(:, :), 2));
 					ocdata = cdata;
 					
 					for j = 1:size(cdata(:, :), 2)
-						pfit(:, j) = polyfit(t_c, points(:, j), out.disp.polyord);
+						pfit(:, j) = polyfit(t_c, points(:, j), out.disp.poly_ord);
 						cdata(:, j) = ocdata(:, j)-polyval(pfit(:, j), out.t');
 						points(:, j) = points(:, j)-polyval(pfit(:, j), t_c);
 					end
 					
-					out.win.polyfit{i} = reshape(pfit, [out.disp.polyord+1, s2(2:end)]);
+					out.win.polyfit{i} = reshape(pfit, [out.disp.poly_ord+1, s2(2:end)]);
 					if(~isempty(ind))
 						ec = [ecb, inds, ') = cdata;'];
 						eval(ec);

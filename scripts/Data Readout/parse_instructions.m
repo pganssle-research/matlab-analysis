@@ -21,7 +21,7 @@ u = struct('s', 1, 'ms', 1000, 'us', 1e6, 'ns', 1e9);
 
 p = prog;
 
-s.ni = p.ninst;
+s.ni = p.n_inst;
 
 ib = zeros(s.ni, 1);
 cb = {cell(s.ni, 1)};
@@ -59,9 +59,9 @@ if(prog.varied && isfield(prog, 'vinslocs'))
 	msteps = num2cell(p.maxsteps);
 	s.msteps = msteps;
 	p.vInstrs = repmat(cprog, msteps{:});
-	vil = reshape(p.vinslocs, p.maxnsteps, p.nVaried);
+	vil = reshape(p.vinslocs, p.max_n_steps, p.nVaried);
 	nv = p.nVaried;
-	nis = p.maxnsteps;
+	nis = p.max_n_steps;
 	
 	cs = msteps;
 	for i = 1:nis

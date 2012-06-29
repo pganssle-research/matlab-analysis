@@ -45,7 +45,20 @@ function out = processData(data, K1, K2, tau1, tau2, varargin)
 % 'nAlphas' -> Number of alphas to try out Default 16 (best to choose a
 %					perfect square).
 %
-% 'alphaLims' -> Limits (in logspace) to try. Default: [-5, 5]
+% 'alpha'	-> Initial alpha choice (default 1)
+%
+% 'alpha_conv' -> Condition for alpha convergence (as a percentage from
+%						optimum
+%
+% 'xscale' -> Pass either 'log' or 'linear', default: linear
+%
+% 'yscale' -> Pass either 'log' or 'linear' default: linear
+%
+% 'xlabel' -> Label for the x axis (no default)
+%
+% 'ylabel' -> Label for the y axis (no default)
+%
+% 'verbose' -> Boolean - if you want printouts of progress. Default: true
 %
 % 'dataperc' -> Lower limit on the value of diag(S1)*diag(S2)'. Default:
 %					1e-4
@@ -56,17 +69,12 @@ function out = processData(data, K1, K2, tau1, tau2, varargin)
 % 'optims'   -> Pass an optimset that will be (indirectly) passed to the
 %					 fmincon. Default values set by this function are:
 %
-%					'Algorithm' = 'interior-point'
 %					'GradObj' = 'on'
-%					'Hessian' = 'off'
+%					'Hessian' = 'on'
 %					'TolX' = 1e-9
 %					'TolFun' = 1e-12
-%					'MaxIter' = 5000
-%					'MaxFunEvals' = 5000
 %					'Display', 'off'
 %
-%					The minimization function can return Hessians, though this
-%					is not supported by the interior-point or sqp algorithms.
 %
 % Outputs:
 % out -> Struct, transformed such that x<->K1, y<->K2
@@ -118,15 +126,109 @@ if(~isempty(a))
 	varargin([a, a+1]) = [];
 end
 
-% Alpha limits
-a = find(strcmp(varargin, 'alphaLims'), 1, 'first');
-alphaLims = [-10, 10];
+% Initial Alpha
+a = find(strcmp(varargin, 'alpha'), 1, 'first');
+alpha = 1;
 if(~isempty(a))
 	al = varargin{a(1)+1};
-	if(isnumeric(al) && length(al) == 2)
-		alphaLims(:) = al(1:2);
+	if(isscalar(al) && isnumeric(al) && al > 0)
+		alpha = al;
 	else
-		warning('Invalid alphaLims, using default value of [%d, %d].', alphaLims(1), alphaLims(2)); %#ok
+		warning('Invalid alpha guess, using default value of %d.', alpha); %#ok
+	end
+	
+	varargin([a, a+1]) = [];
+end
+
+% Alpha convergence level
+a = find(strcmp(varargin, 'alpha_conv'));
+alpha_conv = 0.1; % 10% is a pretty good start.
+if(~isempty(a))
+	na = varargin{a(1)+1};
+	if(isnumeric(na) && isscalar(na) && na > 0)
+		alpha_conv = na;
+	else
+		warning('Invalid alpha convergence, using default value of %d.', alpha_conv); %#ok
+	end
+	
+	varargin([a, a+1]) = [];
+end
+
+% Verbosity
+a = find(strcmp(varargin, 'verbose'));
+verbose = true;
+if(~isempty(a))
+	v = varargin{a(1)+1};
+	if(~isempty(v))
+		verbose = logical(v);
+	else
+		warning('Invalid verbosity, using default value of ''true''.'); %#ok
+	end
+	
+	varargin([a, a+1]) = [];
+end
+
+% XScale
+svals = {'linear', 'log'};
+a = find(strcmp(varargin, 'xscale'));
+xscale = 'linear';
+
+if(~isempty(a))
+	v = varargin{a(1)+1};
+	if(~isempty(v))
+		v = svals{strcmp(v, svals)};
+	end
+	
+	if(~isempty(v))
+		xscale = v;
+	else
+		warning('Invalid xscale, using default value of ''%s''', xscale); %#ok
+	end
+	
+	varargin([a, a+1]) = [];		
+end
+
+% YScale
+svals = {'linear', 'log'};
+a = find(strcmp(varargin, 'yscale'));
+yscale = 'linear';
+
+if(~isempty(a))
+	v = varargin{a(1)+1};
+	if(~isempty(v))
+		v = svals{strcmp(v, svals)};
+	end
+	
+	if(~isempty(v))
+		yscale = v;
+	else
+		warning('Invalid yscale, using default value of ''%s''', yscale); %#ok
+	end
+	
+	varargin([a, a+1]) = [];		
+end
+
+% XLabel
+a = find(strcmp(varargin, 'xlabel'));
+
+if(~isempty(a))
+	v = varargin{a(1)+1};
+	
+	if(ischar(v))
+		xlab = v;
+	end
+	
+	varargin([a, a+1]) = [];
+end
+
+% YLabel
+a = find(strcmp(varargin, 'ylabel'));
+
+if(~isempty(a))
+	v = varargin{a(1)+1};
+	
+	if(ischar(v))
+		ylab = v;
 	end
 	
 	varargin([a, a+1]) = [];
@@ -160,9 +262,8 @@ if(~isempty(a))
 	varargin([a, a+1]) = [];
 end
 
-os = optimset('Algorithm', 'interior-point', 'GradObj', 'on', 'Hessian', ...
-	'off', 'MaxIter', 5000, 'TolX', 1e-8, 'LargeScale', 'on', ...
-	'TolFun',  1e-12, 'MaxFunEvals', 5000, 'Display', 'off');
+os = optimset('GradObj', 'on', 'Hessian', 'on',	'TolX', 1e-9, ...
+	'TolFun',  1e-11, 'LargeScale', 'on',  'Display', 'off');
 
 % Set default values where unset.
 if(exist('o', 'var'))
@@ -201,7 +302,6 @@ else
 	k2 = K2(d.y, tau2);
 end
 
-
 % Get the SVDs now:
 [U1, S1, D1] = svds(k1, nSVDs(1));
 [U2, S2, D2] = svds(k2, nSVDs(2));
@@ -216,14 +316,14 @@ con = sd > S1(1, 1)*S2(1, 1)*dataperc;
 n = sum(con(:));
 
 S = sd(con);
-[S, i] = sort(S, 'descend');
+[S, i] = sort(S, 'descend'); % Sort this like a proper SVD
 
 % We want to vectorize our data matrix so that the calculations can go
 % smoothly. We'll use the equality vec(K1*F*K2') = kron(K2, K1)*vec(F) to
 % preserve the operations of the kernel in the vectorized space.
 D = kron(D2, D1);
 D = D(:, con);
-D = D(:, i);
+D = D(:, i);   % Sort 
 
 % U1 and U2 are the unitary transforms which transform between the SVD and
 % data bases. Use an inverse transform on the data to bring the data into
@@ -231,29 +331,33 @@ D = D(:, i);
 % compressed space.
 Mc = U1'*d.z*U2;
 Mc = Mc(con);
-Mc = Mc(i);
+Mc = Mc(i);		% MCI was a a telecommunications company before it changed 
+					% its name to WorldCom. It is now owned by Verison.
 
 % Create the kernel function in the compressed space by recombining S and
 % D. S can be constructed this way because the singular value matrix is
 % always a diagonal matrix with the singular values along the diagonal.
 K = diag(S)*D';
 id = eye(n, n);	% An identity matrix.
-Ms = Mc'*Mc;		% Precalculate the norm of the compressed data for speed
 
 % Set up the output structure.
 out.t1 = tau1;		
 out.t2 = tau2;
 out.f = {};
-out.F = {};
+out.c = {};
 out.K = K;
-
-% Now set up the guess vector.
-a = find(strcmp(varargin, 'guess'), 1, 'first');
-F0 = ones(n, 1); % Initial guess
+out.alpha = [];
 
 ps = zeros(1, 2);
 ps(1) = length(tau1);
 ps(2) = length(tau2);
+
+st = n*d.std;
+
+% Now set up the guess vector.
+a = find(strcmp(varargin, 'guess'), 1, 'first');
+C0 = ones(n, 1); % Initial guess
+
 
 if(~isempty(a))
 	f = varargin{a+1};
@@ -265,78 +369,116 @@ if(~isempty(a))
 			f = f';
 		end
 		
-		F0 = K*reshape(f, prod(ps), 1);
-		o.TypicalX = F0;
+		C0 = -(K*reshape(f, prod(ps), 1) - Mc)/alphas(1);
+		o.TypicalX = C0;
 	else
 		warning('The best guess provided was not valid, using default.'); %#ok
 	end
 end
-ps = num2cell(ps);
 
-alphas = logspace(alphaLims(1), alphaLims(2), nAlphas);
-out.alphas = alphas;
+ps = num2cell(ps);
 
 % Subplot size
 ss = ceil(sqrt(nAlphas));
-H1 = K*K';
+conv = 0;
 
 for i = 1:nAlphas
-	alpha = alphas(i);
-	H = alpha*H1;
+	out.alpha(i) = alpha;
 	
 	t = cputime;
-	
-	F = fmincon(@(F)fun(F, Mc, H, id, Ms), F0, [], [], [], [], zeros(size(F0)), [], [], o);
+	c = fminunc(@(c)fun(c, Mc, K, alpha, id), C0, o);
 	
 	t2 = cputime-t;
 	minute = floor(t2/60);
 	second = t2-minute*60;
-	fprintf('Elapsed time %02.0g minutes %02.0g seconds.\n', minute, second);
+		
+	C0 = c;
+	f = max(0, reshape(K'*c, ps{:}));
 	
-	out.F{i} = F;
-	out.f{i} = reshape(K'*F, ps{:});
+	out.c{i} = c;
+	out.f{i} = f;
+	
+	if(verbose)
+		fprintf('%d - Elapsed time %02.0g minutes %02.0g seconds.\n', i, minute, second);
+	end
 	
 	subplot(ss, ss, i);
-	image(out.t1, out.t2, out.f{i}', 'CDataMapping', 'scaled');
-	set(gca, 'YDir', 'normal');
+	contour(out.t1, out.t2, out.f{i}');
+
+	set(gca, 'YScale', yscale);
+	set(gca, 'XScale', xscale);
+
+	title(sprintf('%d: \\alpha = %02.2g', i, alpha));
 	
-	title(sprintf('\\alpha = %d', alpha));
+	if(exist('xlab', 'var'))
+		xlabel(xlab);
+	end
 	
-	xlabel('T1');
-	ylabel('T2');
+	if(exist('ylab', 'var'))
+		ylabel(ylab);
+	end
 	
 	drawnow;
+	
+	% Compute the new optimal alpha.
+	a_opt = sqrt(st)/norm(c, 'fro');
+	if(abs((alpha-a_opt)/alpha) < alpha_conv) % Convergence condition.
+		conv = 1;
+		break;
+	end
+	
+	alpha = a_opt;
 end
 
-function [f, g, H] = fun(F, Mc, H, id, Ms)
-% This calculates the minimization function:
-%
-% f = ||Mc - F||^2 + alpha*||K'*F||^2
-%   = sqrt(sum(Mc.^2 + F.^2 - 2*F.*Mc)).^2 + alpha*sqrt(sum(K'*F))^2
-%   = abs(Mc'*Mc + F'*(F-Mc)) + alpha*F'*K*K'*F;
-%   = abs(Ms + F'*(F-Mc)) + F'*H*F;
-%
-% g = Grad = df/dF
-%   = 2*(F - Mc + alpha*K*K'*F);
-%   = 2*(F - Mc + H*F)
-%
-% H = Hess = dg/dF = 2*(alpha*K*K' + id) = 2*(H + id);  
-%
-% Where F is the spectrum in the compressed data set.
-%
-% This is the most speed-critical part of the algorithm, as it is
-% executed as many as MaxIter times.
+if(verbose)
+	if(conv)
+		fprintf('alpha converged at %3.3f after %d attempts.', alpha, length(out.alpha));
+	else
+		fprintf('alpha failed to converge after %d attempts.', nAlphas);
+	end
+end
 
-G1 = F - 2*Mc;
-G2 = H*F;
+if(conv)
+	clf;
+	
+	contour(out.t1, out.t2, out.f{i}');
 
-f = abs(F'*G1 + Ms) + F'*G2;
+	set(gca, 'YScale', yscale);
+	set(gca, 'XScale', xscale);
+
+	title(sprintf('\\alpha = %02.2g', alpha));
+	
+	if(exist('xlab', 'var'))
+		xlabel(xlab);
+	end
+	
+	if(exist('ylab', 'var'))
+		ylabel(ylab);
+	end
+end
+
+
+function [f, G, H] = fun(c, Mc, K, alpha, id)
+% Implements the unconstrained minimization from the referenced paper
+% IEEE Transactions on Signal Processing, Vol. 50, No. 5 May 2002
+%
+% fr = max(0, K'c);
+
+% This is the 'Kuhn-Tucker' condition.
+% Here G(c) = K*min(0, Heavyside(diag(K'*c)))*K'
+% The first two operators resolve to just K with the
+% columns where K'*c <= 0 evalutes to true set to 0, so for speed
+% we can use logical indexing and skip a matrix multiplication.
+H = K;
+H(:, K'*c <= 0) = 0;
+H = H*K' + alpha*id;
+
+G = H*c;	
+
+f = 0.5*c'*G - c'*Mc;	% Eqn 31
 
 if(nargout > 1)
-	g = G1 + 2*G2 + F;
+	G = G - Mc;			% Eqn 32
 end
 
-if(nargout > 2)
-	H = 2*(H+id);
-end
 

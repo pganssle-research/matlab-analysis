@@ -156,7 +156,7 @@ else
 end
 
 % Name output - for field names.
-name = regexprep(fs.name, '[^a-zA-Z0-9]', '');
+name = regexprep(fs.name, '[^a-zA-Z0-9_]', '');
 if(isempty(name))
     name = 'noname';
 end

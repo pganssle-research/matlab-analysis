@@ -29,14 +29,14 @@ MCD_STEPS = 'steps';
 MCD_MAXSTEPS = 'maxsteps';
 MCD_DATAEXPRS = 'dataexprs';
 MCD_DELAYEXPRS = 'delayexprs';
-MCD_VINS = 'vins';
-MCD_VINSDIM = 'vinsdim';
-MCD_VINSMODE = 'vinsmode';
-MCD_VINSLOCS = 'vinslocs';
+MCD_VINS = 'v_ins';
+MCD_VINSDIM = 'v_ins_dim';
+MCD_VINSMODE = 'v_ins_mode';
+MCD_VINSLOCS = 'v_ins_locs';
 
-MCD_AOVARIED = 'aovaried';
-MCD_AODIM = 'aodim';
-MCD_AOVALS = 'aovals';
+MCD_AOVARIED = 'ao_varied';
+MCD_AODIM = 'ao_dim';
+MCD_AOVALS = 'ao_vals';
 
 prog = [];
 p = find_struct_by_field(s, MCD_PROGHEADER);

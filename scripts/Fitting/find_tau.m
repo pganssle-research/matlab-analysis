@@ -67,21 +67,42 @@ if(is_t1)
 	
 	ins = ins(i);
 	t = p.vdel{ins}; % Time vector.
+	
+	name = 't1';
+	namea = 't1a';
+	
+	namee = 't1e';
+	nameae = 't1ae';
+	
+	nameb = 't1b';
 elseif(is_t2)
 	p = s.prog;
-	ins = find(p.ps.instrs.instr(p.vins(p.vtypes == 2)+1) == 2);
-	dats = [p.vdata{ins}];
+	
+	types = p.vtypes(p.vtypes ~= 0);
+		
+	ins = find(p.ps.instrs.instr(p.vins(types == 2)+1) == 2);
+	dim = p.vinsdim(ins);	
+	
+	dats = [p.vdata{dim}];
 	[~, i] = max(dats(end, :));
-	ins = ins(i);
-
-	t = p.vdata{ins}; % Time vector.
+	dim = dim(i);
+	
+	t = dats; % Time vector.
 
 	% Now convert it into time
-	span = find_loop_locs(p.ps, ins);
+	span = find_loop_locs(p.ps, p.vins(ins));
 	instrs = p.ps.instrs;
 	instrs.data(span(1, 1)) = 1;
 
 	t = t*calc_span_length(instrs, span(1, :));
+	
+	name = 't2';
+	namea = 't2a';
+	
+	namee = 't2e';
+	nameae = 't2ae';
+	
+	nameb = 't2b';
 elseif(is_diff)
 	i1 = find(p.ps.instrs.instr == 2, 1, 'first'); % If a malformed loop is found, grab the first loop.
 	if(~isempty(i1))
@@ -108,15 +129,49 @@ elseif(is_diff)
 	V = G_cal*p.aovals';
 	out.disp.G_cal = G_cal;
 	
-	ins = p.aodim(1)+1; % For now assume that it's the first thing varying.
+	dim = find(p.vtypes == 0, 1, 'first');
+	
+	name = 'D';
+	namea = 'Da';
+	
+	namee = 'De';
+	nameae = 'Dae';
+	
+	nameb = 'Db';
 else
 	error('Wrong function.');
 end
 
-if(~o.new && isfield(out, 'fit') && isfield(out.fit, 'c'))
-	c = out.fit.c;
+if(~o.new && isfield(out, 'fit') && (isfield(out.fit, 'co') || isfield(out.fit, 'c')))
+	if(isfield(out.fit, 'co'))
+		c = out.fit.co;
+	else
+		c = out.fit.c;
+	end		
 else
-	c = squeeze(make_avg_any([s.win.ac{:}], navg))*mag_cal;
+	c = (make_avg_any([s.win.c{:}], navg))*mag_cal;
+	
+	% Remove outliers
+	if(size(c, 1) > 2)
+		outliers = arrayfun(@(x)outlier(c(:, x), 0.1), 1:size(c(:, :), 2), ...
+								'UniformOutput', false);
+							
+		outloc = find(~cellfun(@isempty, outliers));
+		
+		trans = 1:size(c, 1);
+		
+		if(~isempty(outloc))
+			for i = 1:length(outloc)
+				ct = trans;
+				ct(outliers{outloc}) = [];
+				c(outliers{outloc}, outloc) = mean(c(ct, outloc));
+			end
+		end
+		
+		
+	end
+	
+	c = squeeze(mean(c, 1));
 end
 
 if(c(1) < 0)
@@ -126,11 +181,13 @@ end
 out.disp.mag_cal = mag_cal;
 
 % Get the t1 for each measurement.
-perm = 1:p.nDims;
-perm(ins) = [];
-perm = [ins, perm(:)];
+perm = 1:p.nDims; 
+perm(dim) = [];
+perm = [dim, perm(:)];
 
-ns = prod(p.maxsteps(perm(2:end)));
+ns = prod(p.maxsteps(1:length(p.maxsteps) ~= dim));
+
+out.fit.co = c;
 
 if(length(perm) > 1)
 	c = permute(c, perm); % Put the varying dimension at the front.
@@ -172,10 +229,11 @@ end
 options.TypicalX = typical_values;
 
 	
-out.fit.tau = zeros(ns, nc);
-out.fit.tauA = zeros(ns, nc);
-out.fit.tauE = zeros(ns, nc);
-out.fit.tauAE = zeros(ns, nc);
+out.fit.(name) = zeros(ns, nc);
+out.fit.(namea) = zeros(ns, nc);
+out.fit.(namee) = zeros(ns, nc);
+out.fit.(nameae) = zeros(ns, nc);
+out.fit.(nameb) = zeros(ns, nc*2);
 
 out.fit.c = c;
 out.fit.cf = zeros(size(c));
@@ -185,24 +243,26 @@ out.fit.beta = zeros(ns, length(typical_values));
 warning('off'); %#ok;
 
 zm = zeros(size(typical_values));
+ub = ones(size(zm))*10;
+ub(2:2:end) = 1e10;
 
 for i = 1:ns
-	[tau, ~, r, ~, ~, ~, J]  = lsqcurvefit(kern, typical_values, t, c(:, i)', zm, [], options);
+	[tau, ~, r, ~, ~, ~, J]  = lsqcurvefit(kern, typical_values, t, c(:, i)', zm, ub, options);
 
-	out.fit.tau(i, :) = tau(1:2:end);
-	out.fit.tauA(i, :) = tau(2:2:end);
+	out.fit.(name)(i, :) = tau(1:2:end);
+	out.fit.(namea)(i, :) = tau(2:2:end);
 	out.fit.cf(:, i) = kern(tau, t);
 
 	% Standard error (95% confidence interval)
 	ci = nlparci(tau, r, 'jacobian', J);
-	out.fit.tauE(i, :) = ci(1:2:end, 2)-tau(1);
-	out.fit.tauAE(i, :) = ci(2, 2)-tau(2);
+	out.fit.(namee)(i, :) = ci(1:2:end, 2)-tau(1);
+	out.fit.(nameae)(i, :) = ci(2, 2)-tau(2);
 
-	out.fit.beta(i, :) = tau;
+	out.fit.(nameb)(i, :) = tau;
 end
 
 
-tau = out.fit.tau;
-taue = out.fit.tauE;
+tau = out.fit.(name);
+taue = out.fit.(namee);
 
 warning('on'); %#ok
