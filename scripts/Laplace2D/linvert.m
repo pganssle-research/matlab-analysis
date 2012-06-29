@@ -28,7 +28,7 @@ function out = linvert(data, K, tau, varargin)
 %			logspace. Size [m x 1]
 %				
 % Outputs:
-% out -> Struct, transformed such that x<->K1, y<->K2
+% out -> Struct containing the inverted spectrum.
 %   out.t = First dimension in transformed (K) space. [size mx1]
 %   out.f = Spectra in the transformed space [size mx1]
 %   out.F = The spectrum in the compressed domain.

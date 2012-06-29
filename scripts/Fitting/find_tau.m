@@ -166,14 +166,15 @@ else
 		if(~isempty(outloc))
 			for i = 1:length(outloc)
 				ct = trans;
-				ct(outliers{outloc}) = [];
-				c(outliers{outloc}, outloc) = mean(c(ct, outloc));
+				ol = outloc(i);
+				ct(outliers{ol}) = [];
+				c(outliers{ol}, ol) = mean(c(ct, ol));
 			end
 		end
-		
-		
 	end
 	
+	out.fit.std = std(c);
+	out.fit.std = mean(out.fit.std(:));
 	c = squeeze(mean(c, 1));
 end
 
@@ -224,6 +225,9 @@ if(is_t1 || is_t2)
 	typical_values = 2*ones(1, nc*2);
 	typical_values(2:2:end) = c(1)/nc;
 elseif(is_diff)
+	out.fit.n = n;
+	out.fit.tau = tau;
+	
 	kern = @(x, t)diffusion_fit(x, t, n, tau);
 	typical_values = 2*ones(1, nc*2)*1e-5;
 	typical_values(2:2:end) = c(1)/nc;

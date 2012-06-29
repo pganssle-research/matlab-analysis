@@ -1,4 +1,4 @@
-function out = processData(data, K1, K2, tau1, tau2, varargin)
+function out = linvert2D(data, K1, K2, tau1, tau2, varargin)
 % This function takes a data structure (x, y, z) and calculates its 2D
 % Laplace inversion with Tikhonov inversion. This is an ill-posed problem,
 % and boils down to executing the minimization:
@@ -24,24 +24,27 @@ function out = processData(data, K1, K2, tau1, tau2, varargin)
 % Inputs:
 % data -> Struct, can be created from make_data_struct()
 %   data.x = First dimension (e.g. time in indirect dimension 1) [size nx1]
-%   data.y = Second dimension (e.g. time in indirect dimension 2, voltage,
-%            etc) [size mx1]
+%   data.y = Second dimension (e.g. Gradient strength or time) [size mx1]
 %   data.z = Measurement response [size nxm]
 %
 % K1, K2 -> Kernel functions. Can be anonymous function or function handles
 %           Functions should be of the form K1(x, tau1), K2(y, tau2) OR
 %           {K1(x, tau1, ...), varargin{:}}, etc.
 %
-% tau1, tau2 -> The initial vector you'd like to span in your kernel
-%               function (this will be cut down severely in the SVD phase).
+% tau1, tau2 -> The vectors in the transformed space. As the transform is
+%						performed in a compressed data space anyway, these can be
+%						very large without causing problems. According to the
+%						paper, they 
 %
 % Outputs:
-% out -> Struct, transformed such that x<->K1, y<->K2
-%   out.t1 = First dimension in transformed (K1) space. [size nx1]
-%   out.t2 = Second dimension in transformed (K2) space. [size mx1]
-%   out.f = Spectrum in the transrmed space [size nxm]
+% out -> Struct containing the inverted spectrum
+%   out.t1 = First dimension in transformed (K1) space. [size Nx1]
+%   out.t2 = Second dimension in transformed (K2) space. [size Mx1]
+%   out.f = Spectrum in the transrmed space [size NxM]
 %   out.F = The spectrum in the compressed domain.
 %   out.K = The kernel functions (combined) in the compressed domain.
+%				This is useful for if you want to recreate the spectrum later
+%				(for guesses and such).
 %
 % Usage:
 % out = processData(data, K1, K2, ... (options));
@@ -69,8 +72,8 @@ alpha_conv = o.alpha_conv;
 verbose = o.verbose;
 xscale = o.xscale;
 yscale = o.yscale;
-xlab = o.xlab;
-ylab = o.ylab;
+xlab = o.xlabel;
+ylab = o.ylabel;
 dataperc = o.dataperc;
 o = o.optims;
 
@@ -144,8 +147,6 @@ st = n*d.std;
 % Now set up the guess vector.
 a = find(strcmp(varargin, 'guess'), 1, 'first');
 C0 = ones(n, 1); % Initial guess
-
-
 if(~isempty(a))
 	f = varargin{a+1};
 	sf = size(f);

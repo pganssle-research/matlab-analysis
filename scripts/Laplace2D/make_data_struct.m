@@ -81,7 +81,7 @@ if(~exist('std', 'var'))
 
 		std = std1*std2;
 	else
-		std = sum(y(3*i+1)-2*y(3*i+2) + y(3*i+3).^2);
+		std = sum((y(3*i+1)-2*y(3*i+2) + y(3*i+3)).^2);
 		std = (1/(6*k))*abs(std);
 	end
 end
