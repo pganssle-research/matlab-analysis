@@ -61,12 +61,15 @@ is_diff = (type == 3);
 % Find the dimension we're interested in.
 p = s.prog;
 if(is_t1)
-	ins = find(p.vtypes == 1);
-	dels = [p.vdel{ins}];
+	types = p.vtypes(p.vtypes ~= 0);
+	
+	dim = p.vinsdim(types == 1);
+	
+	dels = [p.vdel{dim}];
 	[~, i] = max(dels(end, :));
 	
-	ins = ins(i);
-	t = p.vdel{ins}; % Time vector.
+	dim = dim(i);
+	t = [p.vdel{dim}]; % Time vector.
 	
 	name = 't1';
 	namea = 't1a';
