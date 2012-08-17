@@ -9,5 +9,3 @@ function f = exponential_fit(x, t)
 	 A = repmat(x(2:2:end), length(t), 1);
 	 
 	 f = sum(A.*exp(-t*(1./tau)), 2)';
-	  
-	 a = 1;

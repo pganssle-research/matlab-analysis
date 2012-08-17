@@ -89,7 +89,7 @@ if(~isempty(s))
 		if(isfield(s1, MCD_AOVARIED))
 			prog.aovaried = s1.(MCD_AOVARIED);
 			
-			if(prog.aovaried && isfield(s1, MCD_AODIM))
+			if(any(prog.aovaried) && isfield(s1, MCD_AODIM))
 				prog.aodim = s1.(MCD_AODIM);
 			end
 		end

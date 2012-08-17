@@ -1,4 +1,4 @@
-function [out, stdev] = make_avg_anything(data, end_point, start_point)
+function [out, stdev] = make_avg_any(data, end_point, start_point)
 % Takes the average ratio across the curve and scales, then averages them.
 %
 % Usage: [out, stdev] = make_avg_anything(data, end_meas, start_meas, end_point, start_point);
@@ -40,8 +40,12 @@ else
     stdev = zeros(s{2:end}, 1);
 end
 
-out(:) = arrayfun(@(x)mean(data(start_point:end_point, x)), 1:length(data(1, :)));
-stdev(:) = arrayfun(@(x)mean(data(start_point:end_point, x)), 1:length(data(1, :)));
+% Get the average ratio for each point in the indirect dimension
+d2 = data(start_point:end_point, :);
+l = length(data(1, :));
+
+out(:) = arrayfun(@(x)mean(d2(:, x)), 1:l);
+stdev(:) = arrayfun(@(x)mean(d2(:, x)), 1:l);
 % 
 % new_data(:, 1) = data(:, 1);
 % for i=2:s(2)

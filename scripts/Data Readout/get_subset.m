@@ -98,7 +98,7 @@ if(window == 0)
     error('Fraction of length too short.');
 end
 
-if(~exist('asym', 'var') || asym <= 0 || asym > 1)
+if(~exist('asym', 'var') || asym < 0 || asym > 1)
    asym = 0.65; 
 end
 

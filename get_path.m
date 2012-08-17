@@ -1,4 +1,4 @@
-function path = get_path(histpath, filetypes, last)
+function path = get_path(histpath, filetypes, last, name)
 % Simple way to generate UI popups to get paths, with history.
 %
 % Default histpath is get_path_hist, generic.
@@ -94,7 +94,17 @@ if(~exist('filetypes', 'var') || ~iscell(filetypes))
     filetypes = {'*.*'};
 end
 
-[filepath,filefolder]=uigetfile(filetypes,'Select a file', default_dir);
+if(~exist('name', 'var'))
+	name = '';
+end
+
+if(default_dir(end) == filesep)
+	default_dir(end) = [];
+end
+
+[filepath,filefolder]=uigetfile(filetypes,'Select a file', ...
+	[default_dir filesep name]);
+
 path=fullfile(filefolder,filepath);
 
 if (isempty(path) || (~exist(path, 'file')))

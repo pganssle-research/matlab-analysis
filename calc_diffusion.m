@@ -9,10 +9,12 @@ function D = calc_diffusion(T, T0, coeffs)
 % C defaults to 0;
 % 
 % Usage:
-% D = calc_diffusion(T, D0, T0, B[, C]);
+% D = calc_diffusion(T, T0, coeffs);
 
-p = fliplr(coeffs);
+p = fliplr([log(coeffs(1)), coeffs(2:end)]);
 T = T+273.15;
 T0 = T0+273.15;
 
-D = exp(polyval(p, (1./T - 1/T0)));
+TF = 1./T - 1/T0;
+
+D = exp(polyval(p, TF));

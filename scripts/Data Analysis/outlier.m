@@ -50,7 +50,12 @@ yy(yy == 0) = NaN;	% So we can ignore the zeros in the mean and NaN
 							% Useful for vectorizing.
 
 yy(yy == -NaN) = 0;
-R = abs(diag(yy)-nanmean(yy, 2))./nanstd(yy, 0, 2);
+if(isvector(yy))
+	R = abs(yy(1) - nanmean(yy, 2))./nanstd(yy, 0, 2);
+else
+	R = abs(diag(yy)-nanmean(yy, 2))./nanstd(yy, 0, 2);
+end
+
 
 % Statistical test for outliers
 n = n-(1:k);
