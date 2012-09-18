@@ -60,7 +60,8 @@ P = 1/2;
 q_85 =  (38 + 52 * P^2 + 6 * P^4)/(3 + 10*P^2 + 3 * P^4);
 q_87 = (6 + 2*P^2)/(1 + P^2);
 
-RSDB = sum(vb.*sdcs.*n) + vr * 9e-18 *rn;
+RRSDB = vr * 9e-18 *rn;
+RSDB = sum(vb.*sdcs.*n) + RRSDB;
 RSD85 = (1/q_85)*RSDB;
 RSD87 = (1/q_87)*RSDB;
 

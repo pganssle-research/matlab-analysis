@@ -91,6 +91,9 @@ if(~isempty(s))
 			
 			if(any(prog.aovaried) && isfield(s1, MCD_AODIM))
 				prog.aodim = s1.(MCD_AODIM);
+				
+				prog.aodim(prog.aodim > 8) = -1;
+				prog.aodim = prog.aodim+1;
 			end
 		end
 	end

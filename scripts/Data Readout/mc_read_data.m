@@ -339,8 +339,8 @@ if(isfield(out, 'prog') && isfield(out.prog, 'instrs') && out.prog.use_pb)
 					cdata = out.mdata;
 				end
 				
-				asym = 0.75;
-				frac = 0.6;
+				asym = 0.9;
+				frac = 0.75;
 	
 				c_l = (c_l*1000)-20; % 20ms of this will be useless.				
 				
@@ -424,7 +424,7 @@ if(isfield(out, 'prog') && isfield(out.prog, 'instrs') && out.prog.use_pb)
 					points = points';		% For whatever reason the vectors come out as row vectors.
 				end
 				
-				points = points * -1*mod(ns, 2);
+				points = points * (-2*mod(ns+1, 2)+1);
 				
 				out.win.it{i} = t_c;
 	

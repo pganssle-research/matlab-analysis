@@ -208,9 +208,6 @@ set(us.mplots(:, nv), 'Visible', 'on');
 
 set(obj, 'UserData', nv);
 
-
-
-
 function ui_struct = build_ui(s, fig)
 % Builds the axes and the UI struct telling you which ones are which.
 set(0, 'CurrentFigure', fig);
@@ -242,7 +239,7 @@ set(us.axes, 'Title', us.title);
 
 % Transient pulldown
 if(s.prog.nt > 1)
-	tstr = 'Average|'
+	tstr = 'Average|';
 else
 	tstr = '';
 end

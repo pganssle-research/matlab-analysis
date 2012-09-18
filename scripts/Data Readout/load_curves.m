@@ -36,7 +36,7 @@ if(~isfield(o, 'mag_cal') || isempty(o.mag_cal) || o.mag_cal <= 0)
 	end
 end
 
-if(isfield(o, 'navg') && navg >= 1)
+if(isfield(o, 'navg') && o.navg >= 1)
 	navg = o.navg;
 else
 	navg = -1;
@@ -52,12 +52,13 @@ else
 	rem_outliers = true;
 end
 
-types = {'t1', 't2', 'diff', 'field', 'direct'};
+types = {'fid', 't1', 't2', 'diff', 'field', 'direct'};
 get_type = cellfun(@(t)any(strcmp(t, o.type)), types);
 if(~any(get_type))
 	error('Must choose a valid type!');
 end
 
+is_fid = logical(get_type(strcmp('fid', types)));
 is_t1 = logical(get_type(strcmp('t1', types)));
 is_t2 = logical(get_type(strcmp('t2', types)));
 is_fieldv = logical(get_type(strcmp('field', types)));
@@ -73,7 +74,7 @@ if(is_fieldv && (~is_field(o, 'Z_cal') || isempty(o.Z_cal) || o.Z_cal == 0))
 	end
 end
 
-if(is_diff && (~is_field(o, 'G_cal') || isempty(o.G_cal) || o.G_cal == 0))
+if(is_diff && (~isfield(o, 'G_cal') || isempty(o.G_cal) || o.G_cal == 0))
 	if(isfield(s, 'disp') && isfield(s.disp, 'G_cal') && s.disp.G_cal ~= 0)
 		o.G_cal = s.disp.G_cal;
 	else
@@ -83,7 +84,7 @@ if(is_diff && (~is_field(o, 'G_cal') || isempty(o.G_cal) || o.G_cal == 0))
 end
 
 % Start getting all the curves we need.
-has_indirect = any([is_t1, is_t2, is_fieldv, is_diff]);
+has_indirect = any([is_fid, is_t1, is_t2, is_fieldv, is_diff]);
 out = s;
 
 % Get the curves in the direct dimension.
@@ -115,37 +116,38 @@ out.fit.cda = cda;
 out.fit.std = stdd;
 out.fit.stds = stdds;
 
-if(has_indirect)
+p = out.prog;
+if(has_indirect && p.nDims >= 1)
 	ci = make_avg_any(cd, navg);
 	out.fit.ci = ci;
 	
-	p = out.prog;
-	
 	% Get the various indirect mechanisms of variation, if applicable.
 	types = p.vtypes(p.vtypes ~= 0);
-	
-	if(is_t1)
+		
+	if(is_t1 || is_fid)
 		dim = p.vinsdim(types == 1);
 		
-		dels = [p.vdel{dim}];
-		
-		[~, i] = max(dels(end, :));
-		
-		% If you have identical maxima, hopefully all values are identical, I
-		% suppose.
-		if(~isscalar(i))
-			i = i(1);
+		if(~isempty(dim))
+			dels = [p.vdel{dim}];
+
+			[~, i] = max(dels(end, :));
+
+			% If you have identical maxima, hopefully all values are identical, I
+			% suppose.
+			if(~isscalar(i))
+				i = i(1);
+			end
+
+			dim = dim(i);
+
+			t = [p.vdel{dim}]; % Time Vector.
+
+			% Rearrange c so that t1 is in the first dimension.
+			t1.t = t;
+			t1.c = rearrange_ci(ci, dim);
+
+			out.fit.t1 = t1;
 		end
-		
-		dim = dim(i);
-		
-		t = [p.vdel{dim}]; % Time Vector.
-		
-		% Rearrange c so that t1 is in the first dimension.
-		t1.t = t;
-		t1.c = rearrange_ci(ci, dim);
-		
-		out.fit.t1 = t1;
 	end
 	
 	if(is_t2)
@@ -156,26 +158,80 @@ if(has_indirect)
 		
 		dim = p.vinsdim(p.vins == pins(ins));
 		
-		dats = [p.vdata{dim}];
-		[~, i] = max(dats(end, :));
-		
-		if(~isscalar(i))
-			i = i(1);
+		if(~isempty(dim) && ~isempty(ins))
+			
+			dats = [p.vdata{dim}];
+			[~, i] = max(dats(end, :));
+			
+			if(~isscalar(i))
+				i = i(1);
+			end
+			
+			dim = dim(i);
+			
+			span = find_loop_locs(p.ps, p.vins(ins));
+			instrs = p.ps.instrs;
+			
+			instrs.data(span(1, 1)) = 1;
+			
+			t2.t = dats*calc_span_length(instrs, span(1, :));
+			t2.c = rearrange_ci(ci, dim);
+			
+			out.fit.t2 = t2;
+		end
+	end
+	
+	if(is_diff) 
+		i1 = find(p.ps.instrs.instr == 2, 1, 'first'); % If a malformed loop is found, grab the first loop
+		if(~isempty(i1))
+			n = p.ps.instrs.data(i1);
+		else
+			error('Invalid number of cycles!');
 		end
 		
-		dim = dim(i);
+		i1 = find(bitand(bitor(2^12, 2^13), p.ps.instrs.flags(i1:end)), 1, 'first')+i1-1;
 		
-		span = find_loop_locs(p.ps, p.vins(ins));
-		instrs = p.ps.instrs;
+		if(~isempty(i1))
+			tau = p.ps.instrs.ts(i1)*1000; % Convert to 2x ms.
+		else
+			error('Invalid tau!');
+		end
 		
-		instrs.data(span(1, 1)) = 1;
+		dim = find(p.aovaried, 1, 'first');
+		V = get_aovals(p, dim)' * o.G_cal;		
+		out.disp.G_cal = o.G_cal;
 		
-		t2.t = dats*calc_span_length(instrs, span(1, :));
-		t2.c = rearrange_ci(ci, dim);
+		dim = find(p.vtypes==0, 1, 'first');
 		
-		out.fit.t2 = t2;		
+		diff.V = V;
+		diff.c = rearrange_ci(ci, dim);
+		diff.n = n;
+		diff.tau = tau;
+		
+		out.fit.diff = diff;			
 	end
 end
+
+function V = get_aovals(p, dim)
+% Convert aovals back from a linearly indexed array and retrieve the values
+% for the dimension 'dim'
+
+n = 1;
+avc = cell(1, p.nAout);
+
+for i = 1:p.nAout
+	if(p.aodim(i) < 1)
+		ns = 1;
+	else
+		ns = p.maxsteps(p.aodim(i));
+	end
+	
+	avc{i} = p.aovals(n:(n+ns-1));
+	n = n+ns;
+end
+
+V = avc{dim};
+
 
 
 function c = rearrange_ci(ci, dim)

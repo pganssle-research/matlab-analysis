@@ -55,7 +55,7 @@ else
 		ct = t;
 		ct(outliers{i}) = [];
 		dmean(i) = mean(d(ct, i), 1);
-		dstd(i) = std(d(ct, i));
+		dstd(i) = std(d(ct, i))/sqrt(length(ct));
 	end
 end
 
