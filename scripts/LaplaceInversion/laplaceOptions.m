@@ -108,7 +108,7 @@ end
 a = find(strcmp(varargin, 'alpha'), 1, 'first');
 if(~isempty(a))
 	al = varargin{a(1)+1};
-	if(isscalar(al) && isnumeric(al) && al > 0)
+	if(isscalar(al) && isnumeric(al) && al >= 0)
 		opt.alpha = al;
 	else
 		warning('Invalid alpha guess, using default value of %d.', ...

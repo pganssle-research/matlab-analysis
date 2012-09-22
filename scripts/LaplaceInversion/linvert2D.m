@@ -107,7 +107,15 @@ end
 % and S2 which are below a certain fraction of the largest singular value
 % (S1S2). These will be the singular values in our compressed space.
 sd = diag(S1)*diag(S2)';
-con = sd > S1(1, 1)*S2(1, 1)*dataperc;
+
+if dataperc > 0
+	con = sd > S1(1, 1)*S2(1, 1)*dataperc;
+else
+	Mc = U1'*d.z*U2;
+	c = logical(abs(Mc) >= d.std);
+	con = c;
+end
+
 n = sum(con(:));
 
 S = sd(con);

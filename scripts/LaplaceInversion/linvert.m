@@ -81,21 +81,20 @@ end
 % Get the SVDs now:
 [U, S, D] = svds(k, nSVDs(1));
 
-% Run a test to see where a reasonable cutoff would be:
-Mc = U'*d.y;
-c = logical(abs(Mc) >= d.std);
-con = c;
-n = sum(con(:));
-
 % The "S" matrix is the diagonal matrix of singular values, organized in
 % descending order, and are a representation of the magnitude of each
 % eigenvalue in the Kernel vector. We can eliminate all values of S which
 % are below a certain fraction.
 S = diag(S);
-if(n < 1)
+if dataperc > 0
 	con = S > S(1)*dataperc;
-	n = sum(con(:));
+else
+	Mc = U'*d.y;
+	c = logical(abs(Mc) >= d.std);
+	con = c;
 end
+
+n = sum(con(:));
 
 S = S(con);
 [S, i] = sort(S, 'descend'); % Sort this like a proper SVD
